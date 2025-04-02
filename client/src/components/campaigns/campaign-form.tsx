@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ChevronRight, Pencil, Play } from "lucide-react";
+import { ArrowLeft, ChevronRight, Pencil, Play, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Avatar } from "@/components/ui/avatar";
@@ -37,6 +37,7 @@ const CampaignForm = ({ isOpen, onClose, campaignToEdit }: CampaignFormProps) =>
   const { toast } = useToast();
   const isEditing = !!campaignToEdit;
   const [activeStep, setActiveStep] = useState<'script' | 'audience' | 'launch'>('script');
+  const [showConversation, setShowConversation] = useState(false);
 
   // Default values for the form
   const defaultValues = isEditing 
@@ -292,72 +293,100 @@ const CampaignForm = ({ isOpen, onClose, campaignToEdit }: CampaignFormProps) =>
                 <div className="p-6 border-l border-border overflow-y-auto bg-muted/30">
                   <h3 className="text-lg font-medium mb-4">Test the Conversation</h3>
                   
-                  <div className="bg-card rounded-lg min-h-[400px] p-4 flex flex-col">
-                    <div className="flex-1 overflow-y-auto mb-4 space-y-4">
-                      {/* AI Message */}
-                      <div className="flex items-start gap-3">
-                        <Avatar className="h-8 w-8 mt-1">
-                          <span className="text-xs">AI</span>
-                        </Avatar>
-                        <div className="bg-muted p-3 rounded-lg max-w-[80%]">
-                          <p className="text-sm">Hello, am I speaking with Riya?</p>
-                        </div>
-                      </div>
-                      
-                      {/* User Message */}
-                      <div className="flex items-start justify-end gap-3">
-                        <div className="bg-primary/10 p-3 rounded-lg max-w-[80%]">
-                          <p className="text-sm">Yes, who are you?</p>
-                        </div>
-                        <Avatar className="h-8 w-8 mt-1 bg-primary/20">
-                          <span className="text-xs">👤</span>
-                        </Avatar>
-                      </div>
-                      
-                      {/* AI Message */}
-                      <div className="flex items-start gap-3">
-                        <Avatar className="h-8 w-8 mt-1">
-                          <span className="text-xs">AI</span>
-                        </Avatar>
-                        <div className="bg-muted p-3 rounded-lg max-w-[80%]">
-                          <p className="text-sm">Hi Riya, I'm Amit from Aparna Sarovar. We're inviting select buyers to visit our premium luxury apartment project in Nallagandla. Do you have a minute to discuss?</p>
-                        </div>
-                      </div>
-                      
-                      {/* User Message */}
-                      <div className="flex items-start justify-end gap-3">
-                        <div className="bg-primary/10 p-3 rounded-lg max-w-[80%]">
-                          <p className="text-sm">I'm a bit busy. Can you tell me quickly?</p>
-                        </div>
-                        <Avatar className="h-8 w-8 mt-1 bg-primary/20">
-                          <span className="text-xs">👤</span>
-                        </Avatar>
-                      </div>
-                      
-                      {/* AI Message */}
-                      <div className="flex items-start gap-3">
-                        <Avatar className="h-8 w-8 mt-1">
-                          <span className="text-xs">AI</span>
-                        </Avatar>
-                        <div className="bg-muted p-3 rounded-lg max-w-[80%]">
-                          <p className="text-sm">Of course! Aparna Sarovar offers premium residences with world-class amenities in a prime location. The best way to experience it is with a site visit. Would you be open to stopping by this week?</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Input Area */}
-                    <div className="flex items-center gap-2 mt-auto">
-                      <input 
-                        type="text" 
-                        className="flex-1 bg-background border border-input rounded-md px-3 h-10 text-sm"
-                        placeholder="Type your response..."
-                        disabled
-                      />
-                      <Button size="icon" variant="ghost" disabled>
-                        <Play className="h-4 w-4" />
+                  <div className="bg-card rounded-lg min-h-[400px] flex items-center justify-center">
+                    <div className="text-center">
+                      <Button size="lg" className="mb-4" onClick={() => setShowConversation(true)}>
+                        <Play className="mr-2 h-4 w-4" /> Start Call
                       </Button>
+                      <p className="text-muted-foreground">Test your voice agent with a simulated conversation</p>
                     </div>
                   </div>
+                  
+                  {showConversation && (
+                    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
+                      <div className="bg-card rounded-lg w-[500px] h-[600px] p-4 flex flex-col shadow-lg border border-border">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-8 w-8">
+                              <span className="text-xs">AI</span>
+                            </Avatar>
+                            <span>Voice Agent</span>
+                          </div>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => setShowConversation(false)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        
+                        <div className="flex-1 overflow-y-auto mb-4 space-y-4">
+                          {/* AI Message */}
+                          <div className="flex items-start gap-3">
+                            <Avatar className="h-8 w-8 mt-1">
+                              <span className="text-xs">AI</span>
+                            </Avatar>
+                            <div className="bg-muted p-3 rounded-lg max-w-[80%]">
+                              <p className="text-sm">Hello, am I speaking with Riya?</p>
+                            </div>
+                          </div>
+                          
+                          {/* User Message */}
+                          <div className="flex items-start justify-end gap-3">
+                            <div className="bg-primary/10 p-3 rounded-lg max-w-[80%]">
+                              <p className="text-sm">Yes, who are you?</p>
+                            </div>
+                            <Avatar className="h-8 w-8 mt-1 bg-primary/20">
+                              <span className="text-xs">👤</span>
+                            </Avatar>
+                          </div>
+                          
+                          {/* AI Message */}
+                          <div className="flex items-start gap-3">
+                            <Avatar className="h-8 w-8 mt-1">
+                              <span className="text-xs">AI</span>
+                            </Avatar>
+                            <div className="bg-muted p-3 rounded-lg max-w-[80%]">
+                              <p className="text-sm">Hi Riya, I'm Amit from Aparna Sarovar. We're inviting select buyers to visit our premium luxury apartment project in Nallagandla. Do you have a minute to discuss?</p>
+                            </div>
+                          </div>
+                          
+                          {/* User Message */}
+                          <div className="flex items-start justify-end gap-3">
+                            <div className="bg-primary/10 p-3 rounded-lg max-w-[80%]">
+                              <p className="text-sm">I'm a bit busy. Can you tell me quickly?</p>
+                            </div>
+                            <Avatar className="h-8 w-8 mt-1 bg-primary/20">
+                              <span className="text-xs">👤</span>
+                            </Avatar>
+                          </div>
+                          
+                          {/* AI Message */}
+                          <div className="flex items-start gap-3">
+                            <Avatar className="h-8 w-8 mt-1">
+                              <span className="text-xs">AI</span>
+                            </Avatar>
+                            <div className="bg-muted p-3 rounded-lg max-w-[80%]">
+                              <p className="text-sm">Of course! Aparna Sarovar offers premium residences with world-class amenities in a prime location. The best way to experience it is with a site visit. Would you be open to stopping by this week?</p>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Input Area */}
+                        <div className="flex items-center gap-2 mt-auto border-t border-border pt-4">
+                          <input 
+                            type="text" 
+                            className="flex-1 bg-background border border-input rounded-md px-3 h-10 text-sm"
+                            placeholder="Type your response..."
+                          />
+                          <Button size="icon" variant="ghost">
+                            <Play className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </>
             )}
