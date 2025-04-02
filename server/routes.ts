@@ -126,9 +126,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Create a new campaign with same data but a new name
       const newCampaign = await storage.createCampaign({
-        ...campaign,
         name: `${campaign.name} (Copy)`,
+        script: campaign.script,
+        voiceType: campaign.voiceType,
+        maxCallCount: campaign.maxCallCount,
         status: false,
+        createdBy: campaign.createdBy || 1,
+        objective: campaign.objective || "",
+        guidelines: campaign.guidelines || "",
+        callFlow: campaign.callFlow || "",
       });
 
       res.status(201).json(newCampaign);
