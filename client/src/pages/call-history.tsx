@@ -24,7 +24,7 @@ const CallHistory = () => {
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
   // Fetch call history data
-  const { data: callHistory, isLoading } = useQuery({
+  const { data: callHistory, isLoading } = useQuery<EnhancedCallHistory[]>({
     queryKey: ['/api/call-history'],
   });
 
@@ -114,7 +114,7 @@ const CallHistory = () => {
     },
   ];
 
-  const dataToDisplay = callHistory?.length ? callHistory : demoCallHistory;
+  const dataToDisplay = (callHistory && callHistory.length > 0) ? callHistory : demoCallHistory;
 
   const toggleExpand = (id: number) => {
     setExpandedId(expandedId === id ? null : id);
@@ -142,18 +142,23 @@ const CallHistory = () => {
     );
   };
 
-  const formatDate = (date: Date) => {
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear().toString().substring(2);
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
+  const formatDate = (date: Date | string | null) => {
+    if (!date) return "N/A";
+    
+    const dateObj = date instanceof Date ? date : new Date(date);
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+    const year = dateObj.getFullYear().toString().substring(2);
+    const hours = dateObj.getHours().toString().padStart(2, '0');
+    const minutes = dateObj.getMinutes().toString().padStart(2, '0');
     
     return `${day}/${month}/${year} - ${hours}:${minutes}`;
   };
 
-  const getTimeSince = (date: Date) => {
-    return formatDistanceToNow(date, { addSuffix: true });
+  const getTimeSince = (date: Date | string | null) => {
+    if (!date) return "";
+    const dateObj = date instanceof Date ? date : new Date(date);
+    return formatDistanceToNow(dateObj, { addSuffix: true });
   };
 
   return (
@@ -260,7 +265,7 @@ const CallHistory = () => {
                               <Calendar className="h-3.5 w-3.5" /> Date/Time
                             </div>
                             <div className="text-sm">
-                              {formatDate(new Date(call.callDate))} ({getTimeSince(new Date(call.callDate))})
+                              {formatDate(call.callDate)} ({getTimeSince(call.callDate)})
                             </div>
                           </div>
                           <div>
