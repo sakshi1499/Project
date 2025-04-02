@@ -1,4 +1,5 @@
-import { Switch, Route } from "wouter";
+import { useState, useEffect } from "react";
+import { Switch, Route, useLocation } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
@@ -9,22 +10,97 @@ import CallHistory from "@/pages/call-history";
 import Billing from "@/pages/billing";
 import Settings from "@/pages/settings";
 import NotFound from "@/pages/not-found";
+import Login from "@/pages/login";
+import Register from "@/pages/register";
 
-function Router() {
+// Simple auth context for demo purposes
+const isAuthenticated = () => {
+  return localStorage.getItem("authenticated") === "true";
+};
+
+function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen">
       <Sidebar />
       <main className="flex-1 overflow-y-auto bg-background text-foreground">
-        <Switch>
-          <Route path="/" component={Dashboard} />
-          <Route path="/campaigns" component={Campaigns} />
-          <Route path="/call-history" component={CallHistory} />
-          <Route path="/billing" component={Billing} />
-          <Route path="/settings" component={Settings} />
-          <Route component={NotFound} />
-        </Switch>
+        {children}
       </main>
     </div>
+  );
+}
+
+function PublicLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <main className="h-screen w-screen bg-background text-foreground">
+      {children}
+    </main>
+  );
+}
+
+function Router() {
+  const [location, setLocation] = useLocation();
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
+
+  // Check authentication status on mount and redirect if needed
+  useEffect(() => {
+    // Exclude auth pages from the redirect
+    const isAuthPage = location === "/login" || location === "/register";
+    
+    if (!isAuthenticated() && !isAuthPage) {
+      setLocation("/login");
+    } else if (isAuthenticated() && isAuthPage) {
+      setLocation("/");
+    }
+    setIsAuthChecked(true);
+  }, [location, setLocation]);
+
+  if (!isAuthChecked) {
+    return null; // Show nothing until we check auth
+  }
+
+  return (
+    <Switch>
+      <Route path="/login">
+        <PublicLayout>
+          <Login />
+        </PublicLayout>
+      </Route>
+      <Route path="/register">
+        <PublicLayout>
+          <Register />
+        </PublicLayout>
+      </Route>
+      <Route path="/">
+        <AuthenticatedLayout>
+          <Dashboard />
+        </AuthenticatedLayout>
+      </Route>
+      <Route path="/campaigns">
+        <AuthenticatedLayout>
+          <Campaigns />
+        </AuthenticatedLayout>
+      </Route>
+      <Route path="/call-history">
+        <AuthenticatedLayout>
+          <CallHistory />
+        </AuthenticatedLayout>
+      </Route>
+      <Route path="/billing">
+        <AuthenticatedLayout>
+          <Billing />
+        </AuthenticatedLayout>
+      </Route>
+      <Route path="/settings">
+        <AuthenticatedLayout>
+          <Settings />
+        </AuthenticatedLayout>
+      </Route>
+      <Route>
+        <AuthenticatedLayout>
+          <NotFound />
+        </AuthenticatedLayout>
+      </Route>
+    </Switch>
   );
 }
 
