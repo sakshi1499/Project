@@ -63,7 +63,7 @@ export default function Login() {
       localStorage.setItem("authenticated", "true");
       
       // Redirect to dashboard
-      setLocation("/");
+      setLocation("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
       toast({
@@ -101,7 +101,7 @@ export default function Login() {
       localStorage.setItem("authenticated", "true");
       
       // Redirect to dashboard
-      setLocation("/");
+      setLocation("/dashboard");
     } catch (error) {
       console.error("Google auth failed:", error);
       toast({

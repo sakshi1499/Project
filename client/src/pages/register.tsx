@@ -122,7 +122,7 @@ export default function Register() {
       localStorage.setItem("authenticated", "true");
       
       // Redirect to dashboard
-      setLocation("/");
+      setLocation("/dashboard");
     } catch (error: any) {
       console.error("Registration failed:", error);
       toast({
@@ -160,7 +160,7 @@ export default function Register() {
       localStorage.setItem("authenticated", "true");
       
       // Redirect to dashboard
-      setLocation("/");
+      setLocation("/dashboard");
     } catch (error: any) {
       console.error("Google auth failed:", error);
       toast({

@@ -49,7 +49,7 @@ function Router() {
     if (!isAuthenticated() && !isAuthPage) {
       setLocation("/login");
     } else if (isAuthenticated() && isAuthPage) {
-      setLocation("/");
+      setLocation("/dashboard");
     }
     setIsAuthChecked(true);
   }, [location, setLocation]);
@@ -71,6 +71,11 @@ function Router() {
         </PublicLayout>
       </Route>
       <Route path="/">
+        <AuthenticatedLayout>
+          <Dashboard />
+        </AuthenticatedLayout>
+      </Route>
+      <Route path="/dashboard">
         <AuthenticatedLayout>
           <Dashboard />
         </AuthenticatedLayout>

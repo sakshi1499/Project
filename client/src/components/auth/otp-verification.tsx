@@ -1,13 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { InputOTP, InputOTPGroup, InputOTPSlot as BaseInputOTPSlot } from "@/components/ui/input-otp";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useToast } from "@/hooks/use-toast";
-
-// Create a wrapper component to provide the index prop
-const InputOTPSlot = (props: React.ComponentPropsWithoutRef<typeof BaseInputOTPSlot> & { index: number }) => {
-  return <BaseInputOTPSlot {...props} />;
-};
 
 interface OtpVerificationProps {
   phoneNumber: string;
@@ -48,6 +43,16 @@ export const OtpVerification = ({ phoneNumber, onVerificationComplete, onCancel 
     });
     
     startResendTimer();
+  };
+
+  // Handle skip verification for demo
+  const handleSkipVerification = () => {
+    toast({
+      title: "Verification Skipped",
+      description: "For demo purposes, we're skipping verification",
+    });
+    
+    onVerificationComplete();
   };
 
   // Handle OTP verification
@@ -100,20 +105,51 @@ export const OtpVerification = ({ phoneNumber, onVerificationComplete, onCancel 
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="flex flex-col items-center space-y-4">
-          <div className="w-full flex justify-center">
-            <InputOTP
-              maxLength={6}
-              value={otp}
-              onChange={setOtp}
-              render={({ slots }) => (
-                <InputOTPGroup>
-                  {slots.map((slot, i) => (
-                    <InputOTPSlot key={i} {...slot} index={i} />
-                  ))}
-                </InputOTPGroup>
-              )}
-            />
+          <div className="w-full flex justify-center mb-4">
+            <Button onClick={handleSkipVerification} variant="outline">
+              Skip Verification (Demo)
+            </Button>
           </div>
+          
+          <div className="text-xs text-center text-muted-foreground mb-4">
+            Enter any 6 digits to simulate verification
+          </div>
+          
+          <div className="flex justify-center gap-2">
+            {[...Array(6)].map((_, i) => (
+              <div 
+                key={i}
+                className="w-10 h-10 border rounded flex items-center justify-center text-lg"
+              >
+                {otp[i] || ''}
+              </div>
+            ))}
+          </div>
+          
+          <div className="flex flex-wrap justify-center gap-2 mt-4">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num) => (
+              <Button
+                key={num}
+                variant="outline"
+                className="w-12 h-12"
+                onClick={() => {
+                  if (otp.length < 6) {
+                    setOtp(prev => prev + num);
+                  }
+                }}
+              >
+                {num}
+              </Button>
+            ))}
+            <Button
+              variant="outline"
+              className="w-12 h-12"
+              onClick={() => setOtp(prev => prev.slice(0, -1))}
+            >
+              ←
+            </Button>
+          </div>
+          
           <Button 
             onClick={handleVerify} 
             className="w-full mt-4" 
