@@ -22,6 +22,19 @@ export const campaigns = pgTable("campaigns", {
   createdBy: integer("created_by").references(() => users.id),
 });
 
+export const callHistory = pgTable("call_history", {
+  id: serial("id").primaryKey(),
+  campaignId: integer("campaign_id").references(() => campaigns.id),
+  contactName: text("contact_name").notNull(),
+  contactEmail: text("contact_email").notNull(),
+  contactPhone: text("contact_phone").notNull(),
+  status: text("status").notNull(), // "Lead Interested", "Not Interested", "Need to follow up"
+  callDate: timestamp("call_date").defaultNow(),
+  callSummary: text("call_summary"),
+  recordingUrl: text("recording_url"),
+  transcriptUrl: text("transcript_url"),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -32,8 +45,16 @@ export const insertCampaignSchema = createInsertSchema(campaigns).omit({
   publishedAt: true,
 });
 
+export const insertCallHistorySchema = createInsertSchema(callHistory).omit({
+  id: true,
+  callDate: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 
 export type InsertCampaign = z.infer<typeof insertCampaignSchema>;
 export type Campaign = typeof campaigns.$inferSelect;
+
+export type InsertCallHistory = z.infer<typeof insertCallHistorySchema>;
+export type CallHistory = typeof callHistory.$inferSelect;

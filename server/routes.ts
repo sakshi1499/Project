@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertCampaignSchema } from "@shared/schema";
+import { insertCampaignSchema, insertCallHistorySchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -140,6 +140,90 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(newCampaign);
     } catch (error) {
       res.status(500).json({ message: "Failed to duplicate campaign" });
+    }
+  });
+
+  // Call History Routes
+  
+  // Get all call history records
+  app.get("/api/call-history", async (_req, res) => {
+    try {
+      const callHistory = await storage.getCallHistory();
+      res.json(callHistory);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch call history" });
+    }
+  });
+
+  // Get call history by campaign ID
+  app.get("/api/call-history/campaign/:id", async (req, res) => {
+    try {
+      const campaignId = parseInt(req.params.id, 10);
+      if (isNaN(campaignId)) {
+        return res.status(400).json({ message: "Invalid campaign ID" });
+      }
+
+      const callHistory = await storage.getCallHistoryByCampaign(campaignId);
+      res.json(callHistory);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch call history" });
+    }
+  });
+
+  // Get a specific call history item
+  app.get("/api/call-history/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid call history ID" });
+      }
+
+      const callHistoryItem = await storage.getCallHistoryItem(id);
+      if (!callHistoryItem) {
+        return res.status(404).json({ message: "Call history item not found" });
+      }
+
+      res.json(callHistoryItem);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch call history item" });
+    }
+  });
+
+  // Create a new call history record
+  app.post("/api/call-history", async (req, res) => {
+    try {
+      const validatedData = insertCallHistorySchema.parse(req.body);
+      const callHistoryItem = await storage.createCallHistoryItem(validatedData);
+      res.status(201).json(callHistoryItem);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid call history data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create call history record" });
+    }
+  });
+
+  // Update call history status
+  app.patch("/api/call-history/:id/status", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid call history ID" });
+      }
+
+      const { status } = req.body;
+      if (!status || typeof status !== "string") {
+        return res.status(400).json({ message: "Status is required" });
+      }
+
+      const updatedCallHistory = await storage.updateCallHistoryStatus(id, status);
+      if (!updatedCallHistory) {
+        return res.status(404).json({ message: "Call history item not found" });
+      }
+
+      res.json(updatedCallHistory);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update call history status" });
     }
   });
 
