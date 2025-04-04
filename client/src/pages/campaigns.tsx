@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import PageHeader from "@/components/layout/page-header";
 import CampaignTable from "@/components/campaigns/campaign-table";
 import CampaignForm from "@/components/campaigns/campaign-form";
@@ -10,8 +11,9 @@ import type { Campaign } from "@shared/schema";
 const Campaigns = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [campaignToEdit, setCampaignToEdit] = useState<Campaign | undefined>(undefined);
+  const [_, setLocation] = useLocation();
 
-  const { data: campaigns, isLoading } = useQuery({
+  const { data: campaigns, isLoading } = useQuery<Campaign[]>({
     queryKey: ["/api/campaigns"],
   });
 
@@ -45,8 +47,7 @@ const Campaigns = () => {
           <Button
             size="lg"
             onClick={() => {
-              setCampaignToEdit(undefined);
-              setIsFormOpen(true);
+              setLocation("/campaign-create");
             }}
           >
             Create New Campaign

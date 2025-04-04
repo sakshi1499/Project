@@ -12,6 +12,9 @@ import Settings from "@/pages/settings";
 import NotFound from "@/pages/not-found";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
+import CampaignCreate from "@/pages/campaign-create";
+import CampaignAudience from "@/pages/campaign-audience";
+import CampaignConfigure from "@/pages/campaign-configure";
 
 // Simple auth context for demo purposes
 const isAuthenticated = () => {
@@ -98,6 +101,21 @@ function Router() {
       <Route path="/settings">
         <AuthenticatedLayout>
           <Settings />
+        </AuthenticatedLayout>
+      </Route>
+      <Route path="/campaign-create">
+        <AuthenticatedLayout>
+          <CampaignCreate />
+        </AuthenticatedLayout>
+      </Route>
+      <Route path="/campaign-audience">
+        <AuthenticatedLayout>
+          <CampaignAudience />
+        </AuthenticatedLayout>
+      </Route>
+      <Route path="/campaign-configure">
+        <AuthenticatedLayout>
+          <CampaignConfigure />
         </AuthenticatedLayout>
       </Route>
       <Route>
