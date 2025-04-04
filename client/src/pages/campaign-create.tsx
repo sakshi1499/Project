@@ -93,12 +93,25 @@ export default function CampaignCreate() {
     }
   }, [campaignData]);
   
-  // Auto-update transcript to input field
+  // Auto-send message when user stops speaking
   useEffect(() => {
-    if (transcript) {
-      setUserInput(transcript);
+    let timeoutId: NodeJS.Timeout;
+    
+    if (transcript && !isSpeaking) {
+      timeoutId = setTimeout(() => {
+        if (transcript.trim()) {
+          const userMessage = { role: "user", content: transcript };
+          setConversationHistory(prev => [...prev, userMessage]);
+          handleSendMessage();
+          resetTranscript();
+        }
+      }, 1000);
     }
-  }, [transcript]);
+    
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [transcript, isSpeaking]);
   
   const startCall = async () => {
     if (!isOpenAIConfigured()) {
@@ -112,6 +125,8 @@ export default function CampaignCreate() {
     
     setIsCallActive(true);
     setConversationHistory([]);
+    // Start listening automatically
+    SpeechRecognition.startListening({ continuous: true });
     
     // Initial AI message based on campaign instructions
     const initialMessage = {
@@ -481,37 +496,24 @@ export default function CampaignCreate() {
                 <div ref={messagesEndRef} />
               </div>
               
-              {/* Input area */}
-              <div className="border-t p-4 flex gap-2">
-                <Button
-                  size="icon"
-                  variant={listening ? "default" : "outline"}
-                  onClick={toggleMicrophone}
-                  disabled={isSpeaking}
-                >
-                  {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-                </Button>
-                <Textarea
-                  className="flex-1 min-h-[40px] max-h-[120px]"
-                  placeholder="Type your message..."
-                  value={userInput}
-                  onChange={(e) => setUserInput(e.target.value)}
-                  disabled={isSpeaking}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSendMessage();
-                    }
-                  }}
-                />
-                <div className="flex flex-col gap-2">
-                  <Button
-                    size="icon"
-                    onClick={handleSendMessage}
-                    disabled={!userInput.trim() || isProcessing || isSpeaking}
-                  >
-                    <Send className="h-4 w-4" />
-                  </Button>
+              {/* Voice Status Area */}
+              <div className="border-t p-4 flex justify-center items-center gap-2">
+                {isSpeaking ? (
+                  <div className="flex items-center gap-2">
+                    <Waveform className="h-4" />
+                    <span className="text-sm">AI Speaking...</span>
+                  </div>
+                ) : listening ? (
+                  <div className="flex items-center gap-2">
+                    <Mic className="h-4 w-4 text-primary animate-pulse" />
+                    <span className="text-sm">Listening...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <Mic className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm">Waiting for AI...</span>
+                  </div>
+                )}
                   <Button
                     size="icon"
                     variant="destructive"
