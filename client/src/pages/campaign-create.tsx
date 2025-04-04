@@ -28,7 +28,7 @@ const isOpenAIConfigured = () => {
 export default function CampaignCreate() {
   const [location, setLocation] = useLocation();
   const { toast } = useToast();
-  
+
   // Extract campaign ID from URL if provided for editing
   const searchParams = new URLSearchParams(window.location.search);
   const campaignId = searchParams.get('id') ? parseInt(searchParams.get('id') as string) : undefined;
@@ -54,13 +54,13 @@ export default function CampaignCreate() {
     "1. Introduction:\n" +
     "   • \"Hello, am I speaking with [Customer Name]?\""
   );
-  
+
   // State for conversation
   const [conversationHistory, setConversationHistory] = useState<{ role: string; content: string }[]>([]);
   const [userInput, setUserInput] = useState("");
   const [isCallActive, setIsCallActive] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  
+
   // Speech recognition
   const {
     transcript,
@@ -68,10 +68,10 @@ export default function CampaignCreate() {
     resetTranscript,
     browserSupportsSpeechRecognition
   } = useSpeechRecognition();
-  
+
   // Speech synthesis
   const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
-  
+
   // Load campaign data if editing an existing campaign
   const { data: campaignData, isLoading: isLoadingCampaign } = useQuery<Campaign>({
     queryKey: ['/api/campaigns', campaignId],
@@ -92,11 +92,11 @@ export default function CampaignCreate() {
       setSelectedVoice(campaignData.voiceType || "indian-male");
     }
   }, [campaignData]);
-  
+
   // Auto-send message when user stops speaking
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
-    
+
     if (transcript && !isSpeaking && !isProcessing) {
       timeoutId = setTimeout(() => {
         if (transcript.trim()) {
@@ -104,12 +104,12 @@ export default function CampaignCreate() {
         }
       }, 1500);
     }
-    
+
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, [transcript, isSpeaking, isProcessing]);
-  
+
   const startCall = async () => {
     if (!isOpenAIConfigured()) {
       toast({
@@ -119,14 +119,25 @@ export default function CampaignCreate() {
       });
       return;
     }
-    
+
     setIsCallActive(true);
     setConversationHistory([]);
     resetTranscript();
-    // Start listening automatically
-    SpeechRecognition.startListening({ continuous: true });
+
+    // Initial AI message
+    const initialMessage = {
+      role: "assistant",
+      content: `Hello, am I speaking with ${campaignTitle.split(' ')[0]}?`
+    };
+    setConversationHistory([initialMessage]);
+    speakText(initialMessage.content);
+
+    // Start listening after initial message
+    setTimeout(() => {
+      SpeechRecognition.startListening({ continuous: true });
+    }, 2000);
   };
-  
+
   const endCall = () => {
     if (synth) synth.cancel();
     if (listening) SpeechRecognition.stopListening();
@@ -134,30 +145,30 @@ export default function CampaignCreate() {
     resetTranscript();
     setUserInput("");
   };
-  
+
   const speakText = (text: string) => {
     if (!synth) return;
-    
+
     setIsSpeaking(true);
     const utterance = new SpeechSynthesisUtterance(text);
-    
+
     // Set voice based on selection
     const voices = synth.getVoices();
     const selectedVoiceObj = voices.find(voice => 
       voice.name.toLowerCase().includes(selectedVoice === "indian-male" ? "hindi" : "en-us")
     );
-    
+
     if (selectedVoiceObj) {
       utterance.voice = selectedVoiceObj;
     }
-    
+
     utterance.onend = () => {
       setIsSpeaking(false);
     };
-    
+
     synth.speak(utterance);
   };
-  
+
   const toggleMicrophone = () => {
     if (listening) {
       SpeechRecognition.stopListening();
@@ -166,29 +177,29 @@ export default function CampaignCreate() {
       SpeechRecognition.startListening({ continuous: true });
     }
   };
-  
+
   const handleSendMessage = async () => {
     const messageContent = transcript || userInput;
     if ((!messageContent.trim() && !transcript) || isProcessing) return;
-    
+
     // Add user message to conversation
     const userMessage = { role: "user", content: messageContent.trim() };
     setConversationHistory(prev => [...prev, userMessage]);
     setIsProcessing(true);
     resetTranscript();
     setUserInput("");
-    
+
     try {
       // Create system message from campaign instructions
       const systemMessage = { role: "system", content: campaignInstructions };
-      
+
       // Prepare messages for API call
       const messages = [
         systemMessage,
         ...conversationHistory,
         userMessage
       ];
-      
+
       // Call OpenAI API
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -203,20 +214,20 @@ export default function CampaignCreate() {
           max_tokens: 150
         })
       });
-      
+
       if (!response.ok) {
         const errorData = await response.text();
         console.error('OpenAI API error:', errorData);
         throw new Error(`API error: ${response.status}`);
       }
-      
+
       const data = await response.json();
       const aiResponse = data.choices[0].message.content;
-      
+
       // Add AI response to conversation
       const assistantMessage = { role: "assistant", content: aiResponse };
       setConversationHistory(prev => [...prev, assistantMessage]);
-      
+
       // Speak the AI response
       if (aiResponse) {
         speakText(aiResponse);
@@ -234,16 +245,16 @@ export default function CampaignCreate() {
       setIsProcessing(false);
     }
   };
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
+
   // Auto-scroll to bottom of conversation
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [conversationHistory]);
-  
+
   return (
     <div className="flex flex-col h-full">
       {/* Header bar */}
@@ -256,7 +267,7 @@ export default function CampaignCreate() {
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
-          
+
           {isEditingTitle ? (
             <div className="flex items-center gap-1">
               <Input
@@ -344,7 +355,7 @@ export default function CampaignCreate() {
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0 .73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
               <circle cx="12" cy="12" r="3" />
             </svg>
             Configure & Launch
@@ -357,7 +368,7 @@ export default function CampaignCreate() {
         {/* Left panel - Campaign Instructions */}
         <div className="w-full md:w-1/2 relative z-10 mb-6 md:mb-0">
           <h2 className="text-lg font-semibold mb-2">Campaign Instructions</h2>
-          
+
           <div className="mb-4">
             <Select value={selectedVoice} onValueChange={setSelectedVoice}>
               <SelectTrigger>
@@ -436,11 +447,11 @@ export default function CampaignCreate() {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div className="mb-2 flex justify-between items-center">
             <span className="text-xs text-muted-foreground">Generated by AI</span>
           </div>
-          
+
           <div className="overflow-hidden rounded-md border border-input h-[400px] md:h-[600px]">
             <Textarea
               className="w-full h-full font-mono text-sm resize-none overflow-auto pr-4 border-none rounded-none"
@@ -453,7 +464,7 @@ export default function CampaignCreate() {
         {/* Right panel - Test the Conversation */}
         <div className="w-full md:w-1/2 relative z-10">
           <h2 className="text-lg font-semibold mb-4">Test the Conversation</h2>
-          
+
           {!isCallActive ? (
             <div className="flex flex-col items-center justify-center h-[600px] bg-muted/30 rounded-lg">
               <Button
@@ -491,7 +502,7 @@ export default function CampaignCreate() {
                 ))}
                 <div ref={messagesEndRef} />
               </div>
-              
+
               {/* Voice Status Area */}
               <div className="border-t p-4 flex justify-center items-center gap-2">
                 {isSpeaking ? (
@@ -540,7 +551,7 @@ export default function CampaignCreate() {
           )}
         </div>
       </div>
-      
+
       {/* Footer */}
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between p-4 border-t">
         <Button
