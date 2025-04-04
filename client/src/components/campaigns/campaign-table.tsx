@@ -111,7 +111,7 @@ const CampaignTable = ({ campaigns, isLoading, onEditCampaign }: CampaignTablePr
   return (
     <div className="bg-muted rounded-xl overflow-hidden border border-border">
       {/* Table Header */}
-      <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-border text-sm font-medium text-muted-foreground">
+      <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-border text-sm font-medium text-muted-foreground">
         <div className="col-span-1">Status</div>
         <div className="col-span-4">Name</div>
         <div className="col-span-2">Number Of Calls</div>
@@ -124,21 +124,31 @@ const CampaignTable = ({ campaigns, isLoading, onEditCampaign }: CampaignTablePr
         {campaigns.map((campaign) => (
           <div 
             key={campaign.id} 
-            className="grid grid-cols-12 gap-4 px-6 py-4 items-center hover:bg-accent/5 transition-colors"
+            className="flex flex-col md:grid md:grid-cols-12 gap-2 md:gap-4 px-4 md:px-6 py-4 items-start md:items-center hover:bg-accent/5 transition-colors"
           >
-            <div className="col-span-1">
+            <div className="flex items-center justify-between w-full md:w-auto md:col-span-1">
+              <span className="md:hidden font-medium">Status</span>
               <Switch
                 checked={campaign.status}
                 disabled={pendingStatusChanges.has(campaign.id)}
                 onCheckedChange={() => handleToggleStatus(campaign.id, campaign.status)}
               />
             </div>
-            <div className="col-span-4 font-medium">{campaign.name}</div>
-            <div className="col-span-2">{campaign.maxCallCount}</div>
-            <div className="col-span-3 text-muted-foreground">
-              {format(new Date(campaign.publishedAt), "MM/dd/yy - HH:mma")}
+            <div className="flex items-center justify-between w-full md:w-auto md:col-span-4">
+              <span className="md:hidden font-medium">Name</span>
+              <span className="font-medium">{campaign.name}</span>
             </div>
-            <div className="col-span-2 flex justify-end space-x-2">
+            <div className="flex items-center justify-between w-full md:w-auto md:col-span-2">
+              <span className="md:hidden font-medium">Number of Calls</span>
+              <span>{campaign.maxCallCount}</span>
+            </div>
+            <div className="flex items-center justify-between w-full md:w-auto md:col-span-3">
+              <span className="md:hidden font-medium">Published Time</span>
+              <span className="text-muted-foreground">
+                {format(new Date(campaign.publishedAt), "MM/dd/yy - HH:mma")}
+              </span>
+            </div>
+            <div className="flex md:col-span-2 justify-end space-x-2 w-full">
               <Button
                 variant="ghost"
                 size="icon"
