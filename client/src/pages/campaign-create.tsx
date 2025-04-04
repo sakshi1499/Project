@@ -104,6 +104,15 @@ export default function CampaignCreate() {
   }, [transcript, isSpeaking, isProcessing]);
 
   const startCall = async () => {
+    if (!browserSupportsSpeechRecognition) {
+      toast({
+        title: "Speech Recognition Not Supported",
+        description: "Your browser doesn't support speech recognition.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!isOpenAIConfigured()) {
       toast({
         title: "API Key Required",
@@ -116,6 +125,7 @@ export default function CampaignCreate() {
     setIsCallActive(true);
     setConversationHistory([]);
     resetTranscript();
+    SpeechRecognition.startListening({ continuous: true });
 
     // Initial AI message with user's name from campaign title
     const userName = campaignTitle.split(' ')[0];
@@ -142,7 +152,7 @@ export default function CampaignCreate() {
 
   const endCall = () => {
     if (synth) synth.cancel();
-    if (listening) SpeechRecognition.stopListening();
+    SpeechRecognition.stopListening();
     setIsCallActive(false);
     resetTranscript();
     setUserInput("");
@@ -180,12 +190,18 @@ export default function CampaignCreate() {
     }
   };
 
-  const handleSendMessage = async () => {
-    const messageContent = transcript || userInput;
-    if ((!messageContent.trim() && !transcript) || isProcessing) return;
+  useEffect(() => {
+    if (transcript && !isProcessing && isCallActive) {
+      handleSendMessage(transcript);
+    }
+  }, [transcript]);
+
+  const handleSendMessage = async (messageContent?: string) => {
+    const content = messageContent || userInput;
+    if ((!content.trim()) || isProcessing) return;
 
     // Add user message to conversation
-    const userMessage = { role: "user", content: messageContent.trim() };
+    const userMessage = { role: "user", content: content.trim() };
     setConversationHistory(prev => [...prev, userMessage]);
     setIsProcessing(true);
     resetTranscript();
