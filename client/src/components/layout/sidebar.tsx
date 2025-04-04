@@ -146,9 +146,11 @@ const Sidebar = () => {
           </NavItem>
         </nav>
 
-        {/* Empty spacing at the bottom */}
+        {/* ProxyTalk text at the bottom */}
         <div className="p-4 mt-auto">
-          {/* Empty footer - ProxyTalk logo removed as requested */}
+          <div className="text-white text-center">
+            ProxyTalk
+          </div>
         </div>
       </div>
     </aside>

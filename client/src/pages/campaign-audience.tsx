@@ -245,12 +245,8 @@ export default function CampaignAudience() {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 p-4 overflow-y-auto relative">
-        {/* Waveform decorations */}
-        <Waveform position="left" />
-        <Waveform position="right" />
-        
-        <div className="grid grid-cols-3 gap-4 mb-6 relative z-10">
+      <div className="flex-1 p-4 overflow-y-auto">
+        <div className="grid grid-cols-3 gap-4 mb-6">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-2xl font-bold">{selectedCount}</CardTitle>
