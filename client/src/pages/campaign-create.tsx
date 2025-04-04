@@ -37,22 +37,15 @@ export default function CampaignCreate() {
   const [campaignTitle, setCampaignTitle] = useState("Construction Campaign");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [campaignInstructions, setCampaignInstructions] = useState(
-    "Objective: You are an AI sales representative calling on behalf of Aparna Sarovar, a premium luxury apartment project in Nallagandla. Your goal is to engage the customer, gauge their interest, and persuade them to visit the site. The primary focus is on securing a visit rather than providing extensive details over the call.\n\n" +
-    "Agent Prompt & Guidelines:\n" +
-    "• Greet the customer by name and introduce yourself as Amit, a representative from Aparna Sarovar.\n" +
-    "• Maintain a friendly and professional tone.\n" +
-    "• Keep responses concise and avoid speaking more than two sentences at a time.\n" +
-    "• Always end with a question or prompt to encourage customer response.\n" +
-    "• If the customer is interested, guide them toward booking a site visit.\n" +
-    "• If they hesitate, address their concerns but steer the conversation back to the visit.\n" +
-    "• Adapt responses based on the customer's interest and objections.\n" +
-    "• Avoid overloading the customer with information—focus on securing a visit.\n" +
-    "• Log key details (interest level, preferred visit time, objections, etc.) into the CRM.\n" +
-    "• Ensure data privacy and compliance with DND regulations.\n" +
-    "• Follow predefined scripts while allowing for dynamic, context-based interactions.\n\n" +
-    "Call Flow & Sample Prompts:\n" +
-    "1. Introduction:\n" +
-    "   • \"Hello, am I speaking with [Customer Name]?\""
+    "Objective: AI sales representative for Aparna Sarovar luxury apartments. Focus on securing site visits.\n\n" +
+    "Guidelines:\n" +
+    "• Introduce as Amit from Aparna Sarovar\n" +
+    "• Keep responses brief and professional\n" +
+    "• Guide towards site visit booking\n" +
+    "• Address concerns while maintaining visit focus\n" +
+    "• Follow compliance and privacy rules\n\n" +
+    "Sample Prompt:\n" +
+    "\"Hello, am I speaking with [Customer Name]?\""
   );
 
   // State for conversation
@@ -463,10 +456,9 @@ export default function CampaignCreate() {
 
           <div className="rounded-md border border-input flex-1">
             <Textarea
-              className="w-full h-full font-mono text-sm resize-none border-none rounded-none"
+              className="w-full h-[300px] font-mono text-sm resize-none border-none rounded-none"
               value={campaignInstructions}
               onChange={(e) => setCampaignInstructions(e.target.value)}
-              style={{ height: 'calc(100% - 2px)' }}
             />
           </div>
         </div>
