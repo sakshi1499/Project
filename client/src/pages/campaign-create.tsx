@@ -97,21 +97,18 @@ export default function CampaignCreate() {
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
     
-    if (transcript && !isSpeaking) {
+    if (transcript && !isSpeaking && !isProcessing) {
       timeoutId = setTimeout(() => {
         if (transcript.trim()) {
-          const userMessage = { role: "user", content: transcript };
-          setConversationHistory(prev => [...prev, userMessage]);
           handleSendMessage();
-          resetTranscript();
         }
-      }, 1000);
+      }, 1500);
     }
     
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [transcript, isSpeaking]);
+  }, [transcript, isSpeaking, isProcessing]);
   
   const startCall = async () => {
     if (!isOpenAIConfigured()) {
@@ -125,19 +122,9 @@ export default function CampaignCreate() {
     
     setIsCallActive(true);
     setConversationHistory([]);
+    resetTranscript();
     // Start listening automatically
     SpeechRecognition.startListening({ continuous: true });
-    
-    // Initial AI message based on campaign instructions
-    const initialMessage = {
-      role: "assistant",
-      content: "Hello, am I speaking with Shiva?"
-    };
-    
-    setConversationHistory([initialMessage]);
-    
-    // Speak the initial message
-    speakText(initialMessage.content);
   };
   
   const endCall = () => {
@@ -468,7 +455,7 @@ export default function CampaignCreate() {
           <h2 className="text-lg font-semibold mb-4">Test the Conversation</h2>
           
           {!isCallActive ? (
-            <div className="flex flex-col items-center justify-center h-[400px] md:h-[600px] bg-muted/30 rounded-lg">
+            <div className="flex flex-col items-center justify-center h-[600px] bg-muted/30 rounded-lg">
               <Button
                 size="lg"
                 className="mb-2"
@@ -481,7 +468,7 @@ export default function CampaignCreate() {
               </p>
             </div>
           ) : (
-            <Card className="flex flex-col h-[400px] md:h-[600px]">
+            <Card className="flex flex-col h-[600px]">
               {/* Conversation display */}
               <div className="flex-1 p-4 overflow-y-auto">
                 {conversationHistory.map((message, index) => (
