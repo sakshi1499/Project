@@ -114,16 +114,24 @@ export default function CampaignCreate() {
     }
 
     try {
-      // First request microphone access
-      await navigator.mediaDevices.getUserMedia({ 
-        audio: true
-      });
-
-      // Start speech recognition
-      SpeechRecognition.startListening({ continuous: true });
+      await navigator.mediaDevices.getUserMedia({ audio: true });
       
-      if (!stream) {
-        throw new Error('No audio stream available');
+      if (!browserSupportsSpeechRecognition) {
+        throw new Error('Speech recognition not supported');
+      }
+      
+      setIsCallActive(true);
+      setConversationHistory([]);
+      resetTranscript();
+      
+      // Initial AI message
+      const userName = campaignTitle.split(' ')[0];
+      const initialMessage = {
+        role: "assistant",
+        content: `Hello, am I speaking with ${userName}?`
+      };
+      setConversationHistory([initialMessage]);
+      speakText(initialMessage.content);
       }
 
       // Test the audio stream
@@ -224,26 +232,21 @@ export default function CampaignCreate() {
   };
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    if (transcript && !isProcessing && isCallActive) {
-      // Wait for a short pause in speech before sending
-      timeout = setTimeout(() => {
-        handleSendMessage(transcript);
-      }, 1000);
-    }
-    return () => clearTimeout(timeout);
-  }, [transcript, isProcessing, isCallActive]);
-
-  useEffect(() => {
-    if (isCallActive) {
+    if (isCallActive && !listening) {
       SpeechRecognition.startListening({ continuous: true, language: 'en-US' });
     }
-    return () => {
-      if (isCallActive) {
-        SpeechRecognition.stopListening();
-      }
-    };
-  }, [isCallActive]);
+  }, [isCallActive, listening]);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (transcript && !isProcessing && isCallActive) {
+      timeout = setTimeout(() => {
+        handleSendMessage(transcript);
+        resetTranscript();
+      }, 1500);
+    }
+    return () => clearTimeout(timeout);
+  }, [transcript]);
 
   const handleSendMessage = async (messageContent?: string) => {
     const content = messageContent || userInput;
