@@ -23,7 +23,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Waveform from "@/components/ui/waveform";
+
 
 // Mock audience data
 const mockContacts = [
@@ -69,7 +69,7 @@ export default function CampaignAudience() {
   
   const [selectedContacts, setSelectedContacts] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [contacts, setContacts] = useState(mockContacts);
+  const [contacts, setContacts] = useState(campaignId ? mockContacts : []);
   
   // Handle file upload trigger
   const handleUploadClick = () => {
@@ -246,7 +246,7 @@ export default function CampaignAudience() {
 
       {/* Main content */}
       <div className="flex-1 p-4 overflow-y-auto">
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-2xl font-bold">{selectedCount}</CardTitle>
@@ -272,7 +272,7 @@ export default function CampaignAudience() {
         </div>
         
         <div className="mb-4">
-          <div className="flex gap-3 items-center">
+          <div className="flex flex-col md:flex-row gap-3 items-start md:items-center">
             <div className="relative flex-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -306,26 +306,28 @@ export default function CampaignAudience() {
               onChange={handleFileUpload}
             />
             
-            {/* Upload button */}
-            <Button 
-              variant="outline" 
-              onClick={handleUploadClick}
-              className="flex gap-1 items-center"
-            >
-              <Upload className="h-4 w-4 mr-1" />
-              Import Excel
-            </Button>
-            
-            {/* Delete button */}
-            <Button 
-              variant="outline" 
-              onClick={handleDeleteSelected}
-              className="flex gap-1 items-center"
-              disabled={selectedContacts.length === 0}
-            >
-              <Trash2 className="h-4 w-4 mr-1" />
-              Delete
-            </Button>
+            <div className="flex w-full md:w-auto gap-2">
+              {/* Upload button */}
+              <Button 
+                variant="outline" 
+                onClick={handleUploadClick}
+                className="flex gap-1 items-center flex-1 md:flex-none"
+              >
+                <Upload className="h-4 w-4 mr-1" />
+                Import Excel
+              </Button>
+              
+              {/* Delete button */}
+              <Button 
+                variant="outline" 
+                onClick={handleDeleteSelected}
+                className="flex gap-1 items-center flex-1 md:flex-none"
+                disabled={selectedContacts.length === 0}
+              >
+                <Trash2 className="h-4 w-4 mr-1" />
+                Delete
+              </Button>
+            </div>
           </div>
         </div>
         
@@ -346,9 +348,9 @@ export default function CampaignAudience() {
                     </div>
                   </TableHead>
                   <TableHead>Name</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead className="hidden sm:table-cell">Phone</TableHead>
+                  <TableHead className="hidden md:table-cell">Email</TableHead>
+                  <TableHead className="hidden lg:table-cell">Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -368,9 +370,9 @@ export default function CampaignAudience() {
                         />
                       </TableCell>
                       <TableCell className="font-medium">{contact.name}</TableCell>
-                      <TableCell>{contact.phone}</TableCell>
-                      <TableCell>{contact.email}</TableCell>
-                      <TableCell>{contact.status}</TableCell>
+                      <TableCell className="hidden sm:table-cell">{contact.phone}</TableCell>
+                      <TableCell className="hidden md:table-cell">{contact.email}</TableCell>
+                      <TableCell className="hidden lg:table-cell">{contact.status}</TableCell>
                     </TableRow>
                   ))
                 )}
@@ -381,10 +383,11 @@ export default function CampaignAudience() {
       </div>
       
       {/* Footer */}
-      <div className="flex justify-between p-4 border-t">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between p-4 border-t">
         <Button
           variant="outline"
           onClick={() => setLocation(campaignId ? `/campaign-create?id=${campaignId}` : "/campaign-create")}
+          className="w-full sm:w-auto"
         >
           Back
         </Button>
@@ -393,6 +396,7 @@ export default function CampaignAudience() {
             `/campaign-configure?id=${campaignId}` : 
             "/campaign-configure")} 
           disabled={selectedContacts.length === 0}
+          className="w-full sm:w-auto"
         >
           Next: {campaignId ? "Update" : "Configure"} & Launch
         </Button>

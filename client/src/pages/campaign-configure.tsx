@@ -131,23 +131,34 @@ export default function CampaignConfigure() {
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-bold">{campaignTitle}</h1>
-          <Button variant="ghost" size="icon" onClick={() => {}}>
-            <span className="sr-only">Edit</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4"
+          
+          {/* Inline editable title */}
+          <div className="flex items-center gap-1">
+            <h1 className="text-xl font-bold">{campaignTitle}</h1>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => {
+                const newTitle = prompt("Enter new campaign name:", campaignTitle);
+                if (newTitle) setCampaignTitle(newTitle);
+              }}
             >
-              <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-              <path d="m15 5 4 4" />
-            </svg>
-          </Button>
+              <span className="sr-only">Edit</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-4 w-4"
+              >
+                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                <path d="m15 5 4 4" />
+              </svg>
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -318,17 +329,7 @@ export default function CampaignConfigure() {
                   />
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="max-retries">Max Retries</Label>
-                  <Input
-                    id="max-retries"
-                    type="number"
-                    min="0"
-                    max="5"
-                    value={maxRetries}
-                    onChange={(e) => setMaxRetries(parseInt(e.target.value))}
-                  />
-                </div>
+                {/* Max Retries removed as requested */}
               </div>
             </CardContent>
           </Card>
@@ -343,21 +344,7 @@ export default function CampaignConfigure() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="call-recording" className="flex-1">
-                    Call Recording
-                    <span className="block text-sm text-muted-foreground">
-                      Save audio for all calls
-                    </span>
-                  </Label>
-                  <Switch
-                    id="call-recording"
-                    checked={enableCallRecording}
-                    onCheckedChange={setEnableCallRecording}
-                  />
-                </div>
-                
-                <Separator />
+                {/* Call Recording removed as requested */}
                 
                 <div className="flex items-center justify-between">
                   <Label htmlFor="transcripts" className="flex-1">
@@ -389,21 +376,7 @@ export default function CampaignConfigure() {
                   />
                 </div>
                 
-                <Separator />
-                
-                <div className="space-y-2">
-                  <Label htmlFor="call-priority">Call Priority</Label>
-                  <Select value={callPriority} onValueChange={setCallPriority}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select call priority" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="low">Low</SelectItem>
-                      <SelectItem value="normal">Normal</SelectItem>
-                      <SelectItem value="high">High</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                {/* Call Priority removed as requested */}
               </div>
             </CardContent>
           </Card>
@@ -417,7 +390,7 @@ export default function CampaignConfigure() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div>
                   <h3 className="text-sm font-medium text-muted-foreground">Campaign Name</h3>
                   <p>{campaignTitle}</p>
@@ -463,21 +436,21 @@ export default function CampaignConfigure() {
       </div>
       
       {/* Footer */}
-      <div className="flex justify-between p-4 border-t">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between p-4 border-t">
         <Button
           variant="outline"
           onClick={() => setLocation(campaignId ? `/campaign-audience?id=${campaignId}` : "/campaign-audience")}
+          className="w-full sm:w-auto"
         >
           Back
         </Button>
-        <div>
-          <Button variant="outline" className="mr-2" onClick={handleSaveAsDraft}>
-            Save as Draft
-          </Button>
-          <Button onClick={handleLaunchCampaign}>
-            {campaignId ? "Update Campaign" : "Launch Campaign"}
-          </Button>
-        </div>
+        <Button 
+          variant="outline" 
+          onClick={handleSaveAsDraft}
+          className="w-full sm:w-auto"
+        >
+          Save as Draft
+        </Button>
       </div>
     </div>
   );

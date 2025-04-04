@@ -116,11 +116,31 @@ const CampaignForm = ({ isOpen, onClose, campaignToEdit }: CampaignFormProps) =>
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <h2 className="text-xl font-semibold">{campaignToEdit?.name || "New Campaign"}</h2>
-          {isEditing && (
-            <Button variant="ghost" size="icon" className="ml-2">
-              <Pencil className="h-4 w-4" />
-            </Button>
+          
+          {isEditing ? (
+            <div className="flex items-center gap-2">
+              {form.getValues("name") ? (
+                <>
+                  <h2 className="text-xl font-semibold">{form.getValues("name")}</h2>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="ml-1" 
+                    onClick={() => {
+                      // Implement inline editing here
+                      const newName = prompt("Enter new campaign name:", form.getValues("name"));
+                      if (newName) form.setValue("name", newName);
+                    }}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                </>
+              ) : (
+                <h2 className="text-xl font-semibold">New Campaign</h2>
+              )}
+            </div>
+          ) : (
+            <h2 className="text-xl font-semibold">New Campaign</h2>
           )}
         </header>
         
@@ -181,10 +201,38 @@ const CampaignForm = ({ isOpen, onClose, campaignToEdit }: CampaignFormProps) =>
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="Indian Male Voice">Indian Male Voice</SelectItem>
-                              <SelectItem value="Default Voice (Male)">Default Voice (Male)</SelectItem>
-                              <SelectItem value="Default Voice (Female)">Default Voice (Female)</SelectItem>
-                              <SelectItem value="Custom Voice 1">Custom Voice 1</SelectItem>
+                              <SelectItem value="Indian Male Voice">
+                                <div className="flex items-center gap-2">
+                                  <Avatar className="h-5 w-5">
+                                    <span className="text-xs">AI</span>
+                                  </Avatar>
+                                  Indian Male Voice
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="Default Voice (Male)">
+                                <div className="flex items-center gap-2">
+                                  <Avatar className="h-5 w-5">
+                                    <span className="text-xs">AI</span>
+                                  </Avatar>
+                                  Default Voice (Male)
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="Default Voice (Female)">
+                                <div className="flex items-center gap-2">
+                                  <Avatar className="h-5 w-5">
+                                    <span className="text-xs">AI</span>
+                                  </Avatar>
+                                  Default Voice (Female)
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="Custom Voice 1">
+                                <div className="flex items-center gap-2">
+                                  <Avatar className="h-5 w-5">
+                                    <span className="text-xs">AI</span>
+                                  </Avatar>
+                                  Custom Voice 1
+                                </div>
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />

@@ -33,12 +33,8 @@ const Campaigns = () => {
       
       {/* Campaign Setup Section */}
       <section className="px-8 py-10 relative overflow-hidden">
-        {/* Waveform Decorations */}
-        <Waveform position="left" />
-        <Waveform position="right" />
-        
         {/* Content */}
-        <div className="text-center max-w-2xl mx-auto relative z-10">
+        <div className="text-center max-w-2xl mx-auto">
           <h2 className="text-3xl font-bold mb-2">Setup your</h2>
           <h3 className="text-3xl font-bold mb-6">Voice Campaign</h3>
           <p className="text-muted-foreground mb-8">
