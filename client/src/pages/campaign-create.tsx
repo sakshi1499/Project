@@ -488,9 +488,9 @@ export default function CampaignCreate() {
               </p>
             </div>
           ) : (
-            <Card className="flex flex-col h-[600px]">
+            <Card className="flex flex-col h-[600px] fixed w-[calc(50%-2rem)] right-4">
               {/* Conversation display */}
-              <div className="flex-1 p-4 overflow-y-auto">
+              <div className="flex-1 p-4 overflow-y-auto" style={{ maxHeight: 'calc(100% - 80px)' }}>
                 {conversationHistory.map((message, index) => (
                   <div
                     key={index}
