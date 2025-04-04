@@ -350,7 +350,25 @@ export default function CampaignCreate() {
           <div className="mb-4">
             <Select value={selectedVoice} onValueChange={setSelectedVoice}>
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue placeholder="Select voice" />
+                <div className="absolute left-3 flex h-3.5 w-3.5 items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-4 w-4"
+                  >
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                    <line x1="12" x2="12" y1="19" y2="22" />
+                  </svg>
+                </div>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="indian-male">
@@ -376,8 +394,52 @@ export default function CampaignCreate() {
                     Indian Male Voice
                   </div>
                 </SelectItem>
-                <SelectItem value="us-female">US Female Voice</SelectItem>
-                <SelectItem value="uk-male">UK Male Voice</SelectItem>
+                <SelectItem value="us-female">
+                  <div className="flex items-center gap-2">
+                    <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center">
+                      <span className="sr-only">US Female Voice</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                        <line x1="12" x2="12" y1="19" y2="22" />
+                      </svg>
+                    </div>
+                    US Female Voice
+                  </div>
+                </SelectItem>
+                <SelectItem value="uk-male">
+                  <div className="flex items-center gap-2">
+                    <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center">
+                      <span className="sr-only">UK Male Voice</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                        <line x1="12" x2="12" y1="19" y2="22" />
+                      </svg>
+                    </div>
+                    UK Male Voice
+                  </div>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>

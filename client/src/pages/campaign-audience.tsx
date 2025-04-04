@@ -6,8 +6,36 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { ChevronLeft, Upload, Trash2, Pencil, Check } from "lucide-react";
+import { ChevronLeft, Upload, Trash2, Pencil, Check, UserPlus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 import {
   Table,
   TableBody,
@@ -135,6 +163,59 @@ export default function CampaignAudience() {
   
   // Count selected contacts
   const selectedCount = selectedContacts.length;
+  
+  // Contact form schema
+  const contactFormSchema = z.object({
+    name: z.string().min(2, { message: "Name must be at least 2 characters" }),
+    phone: z.string()
+      .min(10, { message: "Phone number must be at least 10 digits" })
+      .regex(/^\+?[0-9\s-]+$/, { message: "Invalid phone number format" }),
+    email: z.string().email({ message: "Invalid email address" }),
+    status: z.string().default("Contact"),
+  });
+
+  type ContactFormValues = z.infer<typeof contactFormSchema>;
+
+  // Initialize contact form
+  const form = useForm<ContactFormValues>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      name: "",
+      phone: "",
+      email: "",
+      status: "Contact"
+    },
+  });
+
+  // Handle manual contact adding
+  const [isAddingContact, setIsAddingContact] = useState(false);
+  
+  const onSubmitContact = (data: ContactFormValues) => {
+    // Generate a unique ID
+    const newId = contacts.length > 0 
+      ? Math.max(...contacts.map(contact => contact.id)) + 1 
+      : 1;
+    
+    // Add the new contact
+    const newContact = {
+      id: newId,
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      status: data.status,
+    };
+    
+    setContacts([...contacts, newContact]);
+    
+    // Reset form and close dialog
+    form.reset();
+    setIsAddingContact(false);
+    
+    toast({
+      title: "Contact added",
+      description: `${data.name} has been added to your audience.`,
+    });
+  };
   
   return (
     <div className="flex flex-col h-full">
@@ -306,7 +387,7 @@ export default function CampaignAudience() {
               onChange={handleFileUpload}
             />
             
-            <div className="flex w-full md:w-auto gap-2">
+            <div className="flex w-full md:w-auto gap-2 flex-wrap">
               {/* Upload button */}
               <Button 
                 variant="outline" 
@@ -316,6 +397,108 @@ export default function CampaignAudience() {
                 <Upload className="h-4 w-4 mr-1" />
                 Import Excel
               </Button>
+              
+              {/* Add Contact button */}
+              <Dialog open={isAddingContact} onOpenChange={setIsAddingContact}>
+                <DialogTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    className="flex gap-1 items-center flex-1 md:flex-none"
+                  >
+                    <UserPlus className="h-4 w-4 mr-1" />
+                    Add Contact
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Add New Contact</DialogTitle>
+                    <DialogDescription>
+                      Add a new contact to your campaign. All fields are required.
+                    </DialogDescription>
+                  </DialogHeader>
+                  
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmitContact)} className="space-y-4 py-2">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="John Smith" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Phone</FormLabel>
+                            <FormControl>
+                              <Input placeholder="+91 98765 43210" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                              Include country code with plus sign
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input placeholder="john@example.com" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="status"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Status</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              value={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a status" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="Contact">Contact</SelectItem>
+                                <SelectItem value="Client">Client</SelectItem>
+                                <SelectItem value="Lead">Lead</SelectItem>
+                                <SelectItem value="Prospect">Prospect</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <DialogFooter>
+                        <Button type="submit">Add Contact</Button>
+                      </DialogFooter>
+                    </form>
+                  </Form>
+                </DialogContent>
+              </Dialog>
               
               {/* Delete button */}
               <Button 
