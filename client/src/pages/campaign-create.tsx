@@ -181,10 +181,11 @@ export default function CampaignCreate() {
   };
   
   const handleSendMessage = async () => {
-    if (!userInput.trim() || isProcessing) return;
+    const messageContent = transcript || userInput;
+    if ((!messageContent.trim() && !transcript) || isProcessing) return;
     
     // Add user message to conversation
-    const userMessage = { role: "user", content: userInput };
+    const userMessage = { role: "user", content: messageContent.trim() };
     setConversationHistory(prev => [...prev, userMessage]);
     setIsProcessing(true);
     resetTranscript();
@@ -209,12 +210,16 @@ export default function CampaignCreate() {
           'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
         },
         body: JSON.stringify({
-          model: "gpt-4o",
+          model: "gpt-4",
           messages: messages,
+          temperature: 0.7,
+          max_tokens: 150
         })
       });
       
       if (!response.ok) {
+        const errorData = await response.text();
+        console.error('OpenAI API error:', errorData);
         throw new Error(`API error: ${response.status}`);
       }
       
@@ -226,7 +231,11 @@ export default function CampaignCreate() {
       setConversationHistory(prev => [...prev, assistantMessage]);
       
       // Speak the AI response
-      speakText(aiResponse);
+      if (aiResponse) {
+        speakText(aiResponse);
+      } else {
+        console.error('Empty AI response received');
+      }
     } catch (error) {
       console.error("Error calling OpenAI API:", error);
       toast({
