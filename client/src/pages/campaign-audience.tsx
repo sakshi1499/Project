@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { Campaign } from "@shared/schema";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,8 +36,31 @@ const mockContacts = [
 ];
 
 export default function CampaignAudience() {
-  const [_, setLocation] = useLocation();
-  const [campaignTitle] = useState("Construction Campaign");
+  const [location, setLocation] = useLocation();
+  const [campaignTitle, setCampaignTitle] = useState("Construction Campaign");
+  
+  // Extract campaign ID from URL if provided for editing
+  const searchParams = new URLSearchParams(window.location.search);
+  const campaignId = searchParams.get('id') ? parseInt(searchParams.get('id') as string) : undefined;
+  
+  // Load campaign data if editing an existing campaign
+  const { data: campaignData } = useQuery<Campaign>({
+    queryKey: ['/api/campaigns', campaignId],
+    queryFn: async () => {
+      if (!campaignId) return null;
+      const response = await fetch(`/api/campaigns/${campaignId}`);
+      if (!response.ok) throw new Error('Failed to load campaign');
+      return response.json();
+    },
+    enabled: !!campaignId
+  });
+  
+  // Update state with campaign data when loaded
+  useEffect(() => {
+    if (campaignData) {
+      setCampaignTitle(campaignData.name || "Construction Campaign");
+    }
+  }, [campaignData]);
   const [selectedContacts, setSelectedContacts] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   
@@ -75,7 +100,7 @@ export default function CampaignAudience() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setLocation("/campaign-create")}
+            onClick={() => setLocation(campaignId ? `/campaign-create?id=${campaignId}` : "/campaign-create")}
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
@@ -273,12 +298,17 @@ export default function CampaignAudience() {
       <div className="flex justify-between p-4 border-t">
         <Button
           variant="outline"
-          onClick={() => setLocation("/campaign-create")}
+          onClick={() => setLocation(campaignId ? `/campaign-create?id=${campaignId}` : "/campaign-create")}
         >
           Back
         </Button>
-        <Button onClick={() => setLocation("/campaign-configure")} disabled={selectedContacts.length === 0}>
-          Next: Configure & Launch
+        <Button 
+          onClick={() => setLocation(campaignId ? 
+            `/campaign-configure?id=${campaignId}` : 
+            "/campaign-configure")} 
+          disabled={selectedContacts.length === 0}
+        >
+          Next: {campaignId ? "Update" : "Configure"} & Launch
         </Button>
       </div>
     </div>

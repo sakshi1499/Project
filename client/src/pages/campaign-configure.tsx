@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { Campaign } from "@shared/schema";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,8 +34,31 @@ import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 
 export default function CampaignConfigure() {
-  const [_, setLocation] = useLocation();
-  const [campaignTitle] = useState("Construction Campaign");
+  const [location, setLocation] = useLocation();
+  const [campaignTitle, setCampaignTitle] = useState("Construction Campaign");
+  
+  // Extract campaign ID from URL if provided for editing
+  const searchParams = new URLSearchParams(window.location.search);
+  const campaignId = searchParams.get('id') ? parseInt(searchParams.get('id') as string) : undefined;
+  
+  // Load campaign data if editing an existing campaign
+  const { data: campaignData } = useQuery<Campaign>({
+    queryKey: ['/api/campaigns', campaignId],
+    queryFn: async () => {
+      if (!campaignId) return null;
+      const response = await fetch(`/api/campaigns/${campaignId}`);
+      if (!response.ok) throw new Error('Failed to load campaign');
+      return response.json();
+    },
+    enabled: !!campaignId
+  });
+  
+  // Update state with campaign data when loaded
+  useEffect(() => {
+    if (campaignData) {
+      setCampaignTitle(campaignData.name || "Construction Campaign");
+    }
+  }, [campaignData]);
   const { toast } = useToast();
   
   // Configuration state
@@ -52,13 +77,46 @@ export default function CampaignConfigure() {
   const [enableAnalytics, setEnableAnalytics] = useState(true);
   const [callPriority, setCallPriority] = useState("normal");
   
-  const handleLaunchCampaign = () => {
-    // In a real app, this would save the campaign and launch it
-    toast({
-      title: "Campaign Launched",
-      description: "Your campaign has been launched successfully!",
-    });
-    setLocation("/campaigns");
+  const handleLaunchCampaign = async () => {
+    try {
+      // In a real app, this would make an API call to update or create the campaign
+      const endpoint = campaignId ? `/api/campaigns/${campaignId}` : '/api/campaigns';
+      const method = campaignId ? 'PATCH' : 'POST';
+      
+      // This is just a mock implementation for the demo
+      toast({
+        title: campaignId ? "Campaign Updated" : "Campaign Launched",
+        description: campaignId 
+          ? "Your campaign has been updated successfully!" 
+          : "Your campaign has been launched successfully!",
+      });
+      
+      setLocation("/campaigns");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "There was an error processing your campaign. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+  
+  const handleSaveAsDraft = async () => {
+    try {
+      // In a real app, this would save the campaign as draft through an API call
+      toast({
+        title: campaignId ? "Draft Updated" : "Draft Saved",
+        description: "Your campaign has been saved as a draft.",
+      });
+      
+      setLocation("/campaigns");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "There was an error saving your draft. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
   
   return (
@@ -69,7 +127,7 @@ export default function CampaignConfigure() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setLocation("/campaign-audience")}
+            onClick={() => setLocation(campaignId ? `/campaign-audience?id=${campaignId}` : "/campaign-audience")}
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
@@ -386,7 +444,9 @@ export default function CampaignConfigure() {
                 </div>
                 <div>
                   <h3 className="text-sm font-medium text-muted-foreground">Status</h3>
-                  <p className="text-yellow-500">Ready to launch</p>
+                  <p className="text-yellow-500">
+                    {campaignId ? "Ready to update" : "Ready to launch"}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -395,7 +455,7 @@ export default function CampaignConfigure() {
                 className="w-full"
                 onClick={handleLaunchCampaign}
               >
-                Launch Campaign
+                {campaignId ? "Update Campaign" : "Launch Campaign"}
               </Button>
             </CardFooter>
           </Card>
@@ -406,16 +466,16 @@ export default function CampaignConfigure() {
       <div className="flex justify-between p-4 border-t">
         <Button
           variant="outline"
-          onClick={() => setLocation("/campaign-audience")}
+          onClick={() => setLocation(campaignId ? `/campaign-audience?id=${campaignId}` : "/campaign-audience")}
         >
           Back
         </Button>
         <div>
-          <Button variant="outline" className="mr-2" onClick={() => setLocation("/campaigns")}>
+          <Button variant="outline" className="mr-2" onClick={handleSaveAsDraft}>
             Save as Draft
           </Button>
           <Button onClick={handleLaunchCampaign}>
-            Launch Campaign
+            {campaignId ? "Update Campaign" : "Launch Campaign"}
           </Button>
         </div>
       </div>

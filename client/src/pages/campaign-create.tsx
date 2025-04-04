@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useLocation, useParams } from "wouter";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -12,6 +12,8 @@ import {
 import { Card } from "@/components/ui/card";
 import { ChevronLeft, Mic, MicOff, Play, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery } from "@tanstack/react-query";
+import type { Campaign } from "@shared/schema";
 
 // @ts-ignore
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
@@ -22,9 +24,12 @@ const isOpenAIConfigured = () => {
 };
 
 export default function CampaignCreate() {
-  const { id } = useParams();
-  const [_, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const { toast } = useToast();
+  
+  // Extract campaign ID from URL if provided for editing
+  const searchParams = new URLSearchParams(window.location.search);
+  const campaignId = searchParams.get('id') ? parseInt(searchParams.get('id') as string) : undefined;
   const [selectedVoice, setSelectedVoice] = useState("indian-male");
   const [isProcessing, setIsProcessing] = useState(false);
   const [campaignTitle, setCampaignTitle] = useState("Construction Campaign");
@@ -63,6 +68,27 @@ export default function CampaignCreate() {
   
   // Speech synthesis
   const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
+  
+  // Load campaign data if editing an existing campaign
+  const { data: campaignData, isLoading: isLoadingCampaign } = useQuery<Campaign>({
+    queryKey: ['/api/campaigns', campaignId],
+    queryFn: async () => {
+      if (!campaignId) return null;
+      const response = await fetch(`/api/campaigns/${campaignId}`);
+      if (!response.ok) throw new Error('Failed to load campaign');
+      return response.json();
+    },
+    enabled: !!campaignId
+  });
+
+  // Update state with campaign data when loaded
+  useEffect(() => {
+    if (campaignData) {
+      setCampaignTitle(campaignData.name || "Construction Campaign");
+      setCampaignInstructions(campaignData.script || "");
+      setSelectedVoice(campaignData.voiceType || "indian-male");
+    }
+  }, [campaignData]);
   
   // Auto-update transcript to input field
   useEffect(() => {
@@ -460,16 +486,19 @@ export default function CampaignCreate() {
       </div>
       
       {/* Footer */}
-      <div className="flex justify-end p-4 border-t">
+      <div className="flex justify-between p-4 border-t">
         <Button
           variant="outline"
-          className="mr-2"
           onClick={() => setLocation("/campaigns")}
         >
           Cancel
         </Button>
-        <Button onClick={() => setLocation("/campaign-audience")} className="ml-auto">
-          Next: Select your audience
+        <Button 
+          onClick={() => setLocation(campaignId ? 
+            `/campaign-audience?id=${campaignId}` : 
+            "/campaign-audience")} 
+        >
+          Next: {campaignId ? "Update" : "Select"} your audience
         </Button>
       </div>
     </div>

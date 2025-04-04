@@ -18,8 +18,8 @@ const Campaigns = () => {
   });
 
   const handleEditCampaign = (campaign: Campaign) => {
-    setCampaignToEdit(campaign);
-    setIsFormOpen(true);
+    // Redirect to campaign-create with the campaign ID to edit
+    setLocation(`/campaign-create?id=${campaign.id}`);
   };
 
   const handleCloseForm = () => {
