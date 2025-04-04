@@ -46,7 +46,6 @@ const Campaigns = () => {
           </p>
           <Button
             size="lg"
-            className="bg-[#9c5dfc] hover:bg-[#8c4dec]"
             onClick={() => {
               setLocation("/campaign-create");
             }}
