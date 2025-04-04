@@ -32,16 +32,17 @@ const Campaigns = () => {
       <PageHeader title="Voice Campaigns" showSearch />
       
       {/* Campaign Setup Section */}
-      <section className="px-8 py-10 relative overflow-hidden">
+      <section className="px-4 sm:px-8 py-6 sm:py-10 relative overflow-hidden">
         {/* Content */}
         <div className="text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold mb-2">Setup your</h2>
-          <h3 className="text-3xl font-bold mb-6">Voice Campaign</h3>
-          <p className="text-muted-foreground mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-2">Setup your</h2>
+          <h3 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Voice Campaign</h3>
+          <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 px-2">
             Setup voice campaigns that enable AI to speak on your behalf increasing your productivity by four folds.
           </p>
           <Button
             size="lg"
+            className="w-full sm:w-auto"
             onClick={() => {
               setLocation("/campaign-create");
             }}
@@ -52,7 +53,7 @@ const Campaigns = () => {
       </section>
       
       {/* Campaign Listing Section */}
-      <section className="px-8 pb-12">
+      <section className="px-4 sm:px-8 pb-8 sm:pb-12">
         <CampaignTable 
           campaigns={campaigns || []} 
           isLoading={isLoading}
