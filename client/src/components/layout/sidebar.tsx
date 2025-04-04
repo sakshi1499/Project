@@ -89,7 +89,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="w-60 bg-black border-r border-border/10 h-full flex-shrink-0">
+    <aside className="w-60 bg-zinc-900 border-r border-border/10 h-full flex-shrink-0">
       <div className="flex flex-col h-full">
         {/* User Profile */}
         <div className="p-4 mb-2">

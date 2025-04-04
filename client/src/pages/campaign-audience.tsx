@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { Campaign } from "@shared/schema";
 import { useLocation } from "wouter";
@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Upload, Trash2, Pencil, Check } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import {
   Table,
   TableBody,
@@ -22,22 +23,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Waveform from "@/components/ui/waveform";
 
 // Mock audience data
 const mockContacts = [
-  { id: 1, name: "John Smith", phone: "+1 (555) 123-4567", email: "john.smith@example.com", status: "Lead" },
-  { id: 2, name: "Emily Johnson", phone: "+1 (555) 234-5678", email: "emily.johnson@example.com", status: "Client" },
-  { id: 3, name: "Michael Brown", phone: "+1 (555) 345-6789", email: "michael.brown@example.com", status: "Lead" },
-  { id: 4, name: "Sarah Davis", phone: "+1 (555) 456-7890", email: "sarah.davis@example.com", status: "Prospect" },
-  { id: 5, name: "David Wilson", phone: "+1 (555) 567-8901", email: "david.wilson@example.com", status: "Lead" },
-  { id: 6, name: "Jessica Taylor", phone: "+1 (555) 678-9012", email: "jessica.taylor@example.com", status: "Client" },
-  { id: 7, name: "Kevin Martinez", phone: "+1 (555) 789-0123", email: "kevin.martinez@example.com", status: "Prospect" },
-  { id: 8, name: "Amanda Thomas", phone: "+1 (555) 890-1234", email: "amanda.thomas@example.com", status: "Lead" },
+  { id: 1, name: "Rahul Sharma", phone: "+91 98765 43210", email: "rahul.sharma@example.com", status: "Contact" },
+  { id: 2, name: "Priya Patel", phone: "+91 87654 32109", email: "priya.patel@example.com", status: "Client" },
+  { id: 3, name: "Amit Kumar", phone: "+91 76543 21098", email: "amit.kumar@example.com", status: "Contact" },
+  { id: 4, name: "Neha Singh", phone: "+91 65432 10987", email: "neha.singh@example.com", status: "Contact" },
+  { id: 5, name: "Vikram Mehta", phone: "+91 54321 09876", email: "vikram.mehta@example.com", status: "Contact" },
+  { id: 6, name: "Sneha Reddy", phone: "+91 43210 98765", email: "sneha.reddy@example.com", status: "Client" },
+  { id: 7, name: "Karan Malhotra", phone: "+91 32109 87654", email: "karan.malhotra@example.com", status: "Contact" },
+  { id: 8, name: "Anjali Gupta", phone: "+91 21098 76543", email: "anjali.gupta@example.com", status: "Contact" },
 ];
 
 export default function CampaignAudience() {
   const [location, setLocation] = useLocation();
   const [campaignTitle, setCampaignTitle] = useState("Construction Campaign");
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Extract campaign ID from URL if provided for editing
   const searchParams = new URLSearchParams(window.location.search);
@@ -61,11 +66,50 @@ export default function CampaignAudience() {
       setCampaignTitle(campaignData.name || "Construction Campaign");
     }
   }, [campaignData]);
+  
   const [selectedContacts, setSelectedContacts] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [contacts, setContacts] = useState(mockContacts);
+  
+  // Handle file upload trigger
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+  
+  // Handle file upload
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    
+    // This is a mock implementation. In a real app, we'd parse the Excel file
+    // For now, we'll just show a success message
+    toast({
+      title: "File uploaded successfully",
+      description: `File "${file.name}" has been processed. 8 new contacts imported.`,
+    });
+    
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+  
+  // Handle contact deletion
+  const handleDeleteSelected = () => {
+    if (selectedContacts.length === 0) return;
+    
+    const newContacts = contacts.filter(contact => !selectedContacts.includes(contact.id));
+    setContacts(newContacts);
+    setSelectedContacts([]);
+    
+    toast({
+      title: `${selectedContacts.length} contacts deleted`,
+      description: "The selected contacts have been removed from your audience.",
+    });
+  };
   
   // Filter contacts based on search query
-  const filteredContacts = mockContacts.filter(contact => 
+  const filteredContacts = contacts.filter(contact => 
     contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     contact.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
     contact.phone.includes(searchQuery)
@@ -104,23 +148,33 @@ export default function CampaignAudience() {
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-bold">{campaignTitle}</h1>
-          <Button variant="ghost" size="icon" onClick={() => {}}>
-            <span className="sr-only">Edit</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4"
-            >
-              <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-              <path d="m15 5 4 4" />
-            </svg>
-          </Button>
+          
+          {isEditingTitle ? (
+            <div className="flex items-center gap-1">
+              <Input
+                className="h-8 w-60"
+                value={campaignTitle}
+                onChange={(e) => setCampaignTitle(e.target.value)}
+                autoFocus
+                onBlur={() => setIsEditingTitle(false)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    setIsEditingTitle(false);
+                  }
+                }}
+              />
+              <Button variant="ghost" size="icon" onClick={() => setIsEditingTitle(false)}>
+                <Check className="h-4 w-4" />
+              </Button>
+            </div>
+          ) : (
+            <>
+              <h1 className="text-xl font-bold">{campaignTitle}</h1>
+              <Button variant="ghost" size="icon" onClick={() => setIsEditingTitle(true)}>
+                <Pencil className="h-4 w-4" />
+              </Button>
+            </>
+          )}
         </div>
       </div>
 
@@ -191,8 +245,12 @@ export default function CampaignAudience() {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 p-4 overflow-y-auto">
-        <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="flex-1 p-4 overflow-y-auto relative">
+        {/* Waveform decorations */}
+        <Waveform position="left" />
+        <Waveform position="right" />
+        
+        <div className="grid grid-cols-3 gap-4 mb-6 relative z-10">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-2xl font-bold">{selectedCount}</CardTitle>
@@ -202,7 +260,7 @@ export default function CampaignAudience() {
           
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-2xl font-bold">{mockContacts.length}</CardTitle>
+              <CardTitle className="text-2xl font-bold">{contacts.length}</CardTitle>
               <CardDescription>Total Contacts</CardDescription>
             </CardHeader>
           </Card>
@@ -210,7 +268,7 @@ export default function CampaignAudience() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-2xl font-bold">
-                {Math.round((selectedCount / mockContacts.length) * 100) || 0}%
+                {Math.round((selectedCount / contacts.length) * 100) || 0}%
               </CardTitle>
               <CardDescription>Selection Rate</CardDescription>
             </CardHeader>
@@ -218,28 +276,60 @@ export default function CampaignAudience() {
         </div>
         
         <div className="mb-4">
-          <div className="relative">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
-            <Input
-              className="pl-10"
-              placeholder="Search contacts..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+          <div className="flex gap-3 items-center">
+            <div className="relative flex-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <Input
+                className="pl-10"
+                placeholder="Search contacts..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            
+            {/* Hidden file input */}
+            <input 
+              type="file" 
+              accept=".xlsx,.xls,.csv" 
+              ref={fileInputRef} 
+              className="hidden"
+              onChange={handleFileUpload}
             />
+            
+            {/* Upload button */}
+            <Button 
+              variant="outline" 
+              onClick={handleUploadClick}
+              className="flex gap-1 items-center"
+            >
+              <Upload className="h-4 w-4 mr-1" />
+              Import Excel
+            </Button>
+            
+            {/* Delete button */}
+            <Button 
+              variant="outline" 
+              onClick={handleDeleteSelected}
+              className="flex gap-1 items-center"
+              disabled={selectedContacts.length === 0}
+            >
+              <Trash2 className="h-4 w-4 mr-1" />
+              Delete
+            </Button>
           </div>
         </div>
         
