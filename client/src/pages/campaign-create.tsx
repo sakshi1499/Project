@@ -114,14 +114,44 @@ export default function CampaignCreate() {
     }
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const permissionResult = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+      
+      if (permissionResult.state === 'denied') {
+        toast({
+          title: "Microphone Access Denied",
+          description: "Please enable microphone access in your browser settings and try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        } 
+      });
+      
       if (!stream) {
         throw new Error('No audio stream available');
       }
-    } catch (error) {
+
+      // Test the audio stream
+      const audioContext = new AudioContext();
+      const source = audioContext.createMediaStreamSource(stream);
+      const analyser = audioContext.createAnalyser();
+      source.connect(analyser);
+      
       toast({
-        title: "Microphone Access Required",
-        description: "Please allow microphone access to use voice chat.",
+        title: "Microphone Connected",
+        description: "Your microphone is working and ready for the call.",
+      });
+    } catch (error) {
+      console.error('Microphone error:', error);
+      toast({
+        title: "Microphone Error",
+        description: error instanceof Error ? error.message : "Failed to access microphone. Please check your settings.",
         variant: "destructive",
       });
       return;
