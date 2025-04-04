@@ -124,7 +124,7 @@ const CampaignTable = ({ campaigns, isLoading, onEditCampaign }: CampaignTablePr
         {campaigns.map((campaign) => (
           <div 
             key={campaign.id} 
-            className="flex flex-col md:grid md:grid-cols-12 gap-2 md:gap-4 px-4 md:px-6 py-4 items-start md:items-center hover:bg-accent/5 transition-colors"
+            className="flex flex-col sm:grid sm:grid-cols-12 gap-2 sm:gap-3 md:gap-4 px-4 sm:px-5 md:px-6 py-3 md:py-4 items-start sm:items-center hover:bg-accent/5 transition-colors"
           >
             <div className="flex items-center justify-between w-full md:w-auto md:col-span-1">
               <span className="md:hidden font-medium">Status</span>
