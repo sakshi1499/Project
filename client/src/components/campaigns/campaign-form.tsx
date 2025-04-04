@@ -202,7 +202,7 @@ const CampaignForm = ({ isOpen, onClose, campaignToEdit }: CampaignFormProps) =>
                           <FormLabel>Objective:</FormLabel>
                           <FormControl>
                             <Textarea 
-                              className="min-h-[100px] resize-none"
+                              className="min-h-[150px] resize-none overflow-y-visible"
                               {...field} 
                             />
                           </FormControl>
@@ -219,7 +219,7 @@ const CampaignForm = ({ isOpen, onClose, campaignToEdit }: CampaignFormProps) =>
                           <FormLabel>Agent Prompt & Guidelines:</FormLabel>
                           <FormControl>
                             <Textarea 
-                              className="min-h-[200px]"
+                              className="min-h-[250px] resize-none overflow-y-visible"
                               {...field} 
                             />
                           </FormControl>
@@ -236,7 +236,7 @@ const CampaignForm = ({ isOpen, onClose, campaignToEdit }: CampaignFormProps) =>
                           <FormLabel>Call Flow & Sample Prompts:</FormLabel>
                           <FormControl>
                             <Textarea 
-                              className="min-h-[100px]"
+                              className="min-h-[150px] resize-none overflow-y-visible"
                               {...field} 
                             />
                           </FormControl>
@@ -293,7 +293,7 @@ const CampaignForm = ({ isOpen, onClose, campaignToEdit }: CampaignFormProps) =>
                 <div className="p-6 border-l border-border overflow-y-auto bg-muted/30">
                   <h3 className="text-lg font-medium mb-4">Test the Conversation</h3>
                   
-                  <div className="bg-card rounded-lg min-h-[400px] flex items-center justify-center">
+                  <div className="bg-card rounded-lg min-h-[550px] flex items-center justify-center">
                     <div className="text-center">
                       <Button size="lg" className="mb-4" onClick={() => setShowConversation(true)}>
                         <Play className="mr-2 h-4 w-4" /> Start Call
@@ -448,7 +448,7 @@ const CampaignForm = ({ isOpen, onClose, campaignToEdit }: CampaignFormProps) =>
                 <div className="p-6 border-l border-border overflow-y-auto bg-muted/30">
                   <h3 className="text-lg font-medium mb-4">Audience Preview</h3>
                   
-                  <div className="bg-card rounded-lg min-h-[400px] p-4">
+                  <div className="bg-card rounded-lg min-h-[550px] p-4">
                     <div className="text-center mb-8 py-6">
                       <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-muted mb-4">
                         <span className="text-xl font-semibold">0</span>

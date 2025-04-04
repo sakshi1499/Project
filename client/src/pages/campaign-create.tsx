@@ -348,7 +348,7 @@ export default function CampaignCreate() {
           </div>
           
           <Textarea
-            className="min-h-[400px] w-full font-mono text-sm"
+            className="min-h-[600px] w-full font-mono text-sm resize-none overflow-y-visible"
             value={campaignInstructions}
             onChange={(e) => setCampaignInstructions(e.target.value)}
           />
@@ -359,7 +359,7 @@ export default function CampaignCreate() {
           <h2 className="text-lg font-semibold mb-4">Test the Conversation</h2>
           
           {!isCallActive ? (
-            <div className="flex flex-col items-center justify-center h-[400px] bg-muted/30 rounded-lg">
+            <div className="flex flex-col items-center justify-center h-[600px] bg-muted/30 rounded-lg">
               <Button
                 size="lg"
                 className="mb-2"
@@ -372,7 +372,7 @@ export default function CampaignCreate() {
               </p>
             </div>
           ) : (
-            <Card className="flex flex-col h-[400px]">
+            <Card className="flex flex-col h-[600px]">
               {/* Conversation display */}
               <div className="flex-1 p-4 overflow-y-auto">
                 {conversationHistory.map((message, index) => (
@@ -468,7 +468,7 @@ export default function CampaignCreate() {
         >
           Cancel
         </Button>
-        <Button onClick={() => setLocation("/campaign-create/audience")} className="ml-auto">
+        <Button onClick={() => setLocation("/campaign-audience")} className="ml-auto">
           Next: Select your audience
         </Button>
       </div>

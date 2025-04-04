@@ -218,52 +218,54 @@ export default function CampaignAudience() {
           </div>
         </div>
         
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[50px]">
-                  <div className="flex items-center">
-                    <Checkbox
-                      checked={
-                        filteredContacts.length > 0 &&
-                        selectedContacts.length === filteredContacts.length
-                      }
-                      onCheckedChange={toggleSelectAll}
-                    />
-                  </div>
-                </TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredContacts.length === 0 ? (
+        <div className="rounded-md border overflow-hidden">
+          <div className="max-h-[550px] overflow-y-auto">
+            <Table>
+              <TableHeader className="sticky top-0 bg-background z-10">
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-10 text-muted-foreground">
-                    No contacts found
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredContacts.map((contact) => (
-                  <TableRow key={contact.id}>
-                    <TableCell>
+                  <TableHead className="w-[50px]">
+                    <div className="flex items-center">
                       <Checkbox
-                        checked={selectedContacts.includes(contact.id)}
-                        onCheckedChange={() => toggleContactSelection(contact.id)}
+                        checked={
+                          filteredContacts.length > 0 &&
+                          selectedContacts.length === filteredContacts.length
+                        }
+                        onCheckedChange={toggleSelectAll}
                       />
+                    </div>
+                  </TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Phone</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredContacts.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center py-28 text-muted-foreground">
+                      No contacts found
                     </TableCell>
-                    <TableCell className="font-medium">{contact.name}</TableCell>
-                    <TableCell>{contact.phone}</TableCell>
-                    <TableCell>{contact.email}</TableCell>
-                    <TableCell>{contact.status}</TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  filteredContacts.map((contact) => (
+                    <TableRow key={contact.id}>
+                      <TableCell>
+                        <Checkbox
+                          checked={selectedContacts.includes(contact.id)}
+                          onCheckedChange={() => toggleContactSelection(contact.id)}
+                        />
+                      </TableCell>
+                      <TableCell className="font-medium">{contact.name}</TableCell>
+                      <TableCell>{contact.phone}</TableCell>
+                      <TableCell>{contact.email}</TableCell>
+                      <TableCell>{contact.status}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
       
