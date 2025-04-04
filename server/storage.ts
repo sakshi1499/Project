@@ -14,7 +14,7 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-  
+
   // Campaign methods
   getCampaigns(): Promise<Campaign[]>;
   getCampaign(id: number): Promise<Campaign | undefined>;
@@ -22,7 +22,7 @@ export interface IStorage {
   updateCampaign(id: number, campaign: Partial<InsertCampaign>): Promise<Campaign | undefined>;
   deleteCampaign(id: number): Promise<boolean>;
   toggleCampaignStatus(id: number): Promise<Campaign | undefined>;
-  
+
   // Call History methods
   getCallHistory(): Promise<CallHistory[]>;
   getCallHistoryByCampaign(campaignId: number): Promise<CallHistory[]>;
@@ -47,72 +47,116 @@ export class MemStorage implements IStorage {
     this.userCurrentId = 1;
     this.campaignCurrentId = 1;
     this.callHistoryCurrentId = 1;
-    
+
     // Add some default campaigns for demo
     const defaultCampaigns: InsertCampaign[] = [
       {
         name: "Construction Campaign",
-        script: "Hello, this is a voice assistant calling about your construction project.",
-        objective: "You are an AI sales representative calling on behalf of Aparna Sarovar, a premium luxury apartment project in Nallagandla. Your goal is to engage the customer, gauge their interest, and persuade them to visit the site. The primary focus is on securing a visit rather than providing extensive details over the call.",
-        guidelines: "• Greet the customer by name and introduce yourself as Amit, a representative from Aparna Sarovar.\n• Maintain a friendly and professional tone.\n• Keep responses concise and avoid speaking more than two sentences at a time.\n• Always end with a question or prompt to encourage customer response.\n• If the customer is interested, guide them toward booking a site visit.\n• If they hesitate, address their concerns but steer the conversation back to the visit.\n• Adapt responses based on the customer's interest and objections.\n• Avoid overloading the customer with information—focus on securing a visit.\n• Log key details (interest level, preferred visit time, objections, etc.) into the CRM.\n• Ensure data privacy and compliance with DND regulations.\n• Follow predefined scripts while allowing for dynamic, context-based interactions.",
-        callFlow: "Call Flow & Sample Prompts:\n1. Introduction:\n• \"Hello, am I speaking with [Customer Name]?\"",
+        script: "Hello, I'm calling about a luxury construction project.",
+        objective: "Schedule site visits for new construction project.",
+        guidelines: "• Greet professionally\n• Focus on project highlights\n• Schedule site visits",
+        callFlow: "1. Introduction\n2. Project overview\n3. Schedule visit",
         voiceType: "Indian Male Voice",
         maxCallCount: 1000,
         status: true,
         createdBy: 1
       },
       {
-        name: "Urban Nest Site Visit Drive",
-        script: "Hello, this is a voice assistant to schedule your site visit.",
-        objective: "You are an AI representative for Urban Nest properties trying to schedule site visits with potential buyers.",
-        guidelines: "• Be professional but conversational\n• Focus on the key benefits of the property\n• Address questions about location and amenities",
-        callFlow: "1. Introduction\n2. Describe property highlights\n3. Suggest available visit times",
-        voiceType: "Default Voice (Female)",
-        maxCallCount: 1,
-        status: false,
-        createdBy: 1
-      },
-      {
-        name: "The Pinnacle Residency Tour",
-        script: "Hello, this is a voice assistant to confirm your residency tour.",
-        objective: "You're confirming scheduled tours for The Pinnacle luxury residences.",
-        guidelines: "• Thank customers for their interest\n• Confirm date and time\n• Ask if they need directions",
-        callFlow: "1. Greeting\n2. Confirmation\n3. Address any questions",
-        voiceType: "Default Voice (Male)",
-        maxCallCount: 500,
+        name: "Premium Apartment Sales",
+        script: "Hi, I'm calling about our premium apartment complex.",
+        objective: "Generate leads for luxury apartments.",
+        guidelines: "• Highlight amenities\n• Discuss location benefits\n• Offer virtual tours",
+        callFlow: "1. Greeting\n2. Features overview\n3. Tour booking",
+        voiceType: "Indian Female Voice",
+        maxCallCount: 800,
         status: true,
         createdBy: 1
       },
       {
-        name: "Opulent Heights Site Tour",
-        script: "Hello, this is a voice assistant to schedule your site tour.",
-        objective: "Schedule tours for the new Opulent Heights development.",
-        guidelines: "• Emphasize luxury amenities\n• Mention limited availability\n• Offer weekend and weekday slots",
-        callFlow: "1. Introduction\n2. Highlight features\n3. Schedule appointment",
-        voiceType: "Default Voice (Female)",
-        maxCallCount: 200,
+        name: "Villa Project Launch",
+        script: "Hello, I'm reaching out about our new villa project launch.",
+        objective: "Pre-launch bookings for villa project.",
+        guidelines: "• Emphasize exclusivity\n• Discuss early-bird offers\n• Set up meetings",
+        callFlow: "1. Introduction\n2. Project brief\n3. Booking process",
+        voiceType: "British Male Voice",
+        maxCallCount: 500,
         status: false,
         createdBy: 1
       },
       {
-        name: "Test Campaign",
-        script: "This is a test campaign script.",
-        objective: "This is a test campaign for internal testing purposes.",
-        guidelines: "• Keep it brief\n• Test all system features",
-        callFlow: "1. Test greeting\n2. Test response\n3. End call",
-        voiceType: "Default Voice (Male)",
-        maxCallCount: 1,
+        name: "Investment Property",
+        script: "Hi, calling about an investment opportunity in real estate.",
+        objective: "Target potential investors for property.",
+        guidelines: "• Focus on ROI\n• Explain payment plans\n• Schedule consultations",
+        callFlow: "1. Greeting\n2. Investment details\n3. Meeting setup",
+        voiceType: "American Male Voice",
+        maxCallCount: 600,
+        status: true,
+        createdBy: 1
+      },
+      {
+        name: "Waterfront Residences",
+        script: "Hello, I'm calling about our waterfront property project.",
+        objective: "Promote waterfront luxury homes.",
+        guidelines: "• Highlight waterfront features\n• Discuss unique amenities\n• Book site visits",
+        callFlow: "1. Introduction\n2. Location benefits\n3. Visit scheduling",
+        voiceType: "Indian Male Voice",
+        maxCallCount: 700,
+        status: true,
+        createdBy: 1
+      },
+      {
+        name: "Smart Home Project",
+        script: "Hi, I'm calling about our smart home development.",
+        objective: "Promote tech-enabled luxury homes.",
+        guidelines: "• Explain smart features\n• Discuss automation\n• Demo scheduling",
+        callFlow: "1. Greeting\n2. Tech overview\n3. Demo booking",
+        voiceType: "American Female Voice",
+        maxCallCount: 400,
         status: false,
         createdBy: 1
-      }
+      },
+      {
+        name: "Golf View Apartments",
+        script: "Hello, calling about our golf-view luxury apartments.",
+        objective: "Sell golf course facing properties.",
+        guidelines: "• Emphasize golf amenities\n• Discuss lifestyle\n• Arrange viewings",
+        callFlow: "1. Introduction\n2. Golf benefits\n3. Visit booking",
+        voiceType: "British Female Voice",
+        maxCallCount: 300,
+        status: true,
+        createdBy: 1
+      },
+      {
+        name: "Eco-Friendly Homes",
+        script: "Hi, I'm calling about our sustainable living project.",
+        objective: "Promote eco-friendly residential project.",
+        guidelines: "• Highlight sustainability\n• Discuss green features\n• Schedule tours",
+        callFlow: "1. Greeting\n2. Green features\n3. Tour booking",
+        voiceType: "Indian Female Voice",
+        maxCallCount: 450,
+        status: true,
+        createdBy: 1
+      },
+      {
+        name: "Senior Living Complex",
+        script: "Hello, I'm calling about our senior living community.",
+        objective: "Promote senior-friendly homes.",
+        guidelines: "• Focus on accessibility\n• Discuss medical facilities\n• Arrange visits",
+        callFlow: "1. Introduction\n2. Facility overview\n3. Visit scheduling",
+        voiceType: "British Male Voice",
+        maxCallCount: 250,
+        status: false,
+        createdBy: 1
+      },
     ];
-    
+
     // Create default user
     this.createUser({
       username: "Shiva Chintaluru",
       password: "password123"
     });
-    
+
     // Create default campaigns
     defaultCampaigns.forEach(campaign => this.createCampaign(campaign));
 
@@ -281,15 +325,15 @@ export class MemStorage implements IStorage {
     this.users.set(id, user);
     return user;
   }
-  
+
   async getCampaigns(): Promise<Campaign[]> {
     return Array.from(this.campaigns.values());
   }
-  
+
   async getCampaign(id: number): Promise<Campaign | undefined> {
     return this.campaigns.get(id);
   }
-  
+
   async createCampaign(insertCampaign: InsertCampaign): Promise<Campaign> {
     const id = this.campaignCurrentId++;
     const now = new Date();
@@ -309,11 +353,11 @@ export class MemStorage implements IStorage {
     this.campaigns.set(id, campaign);
     return campaign;
   }
-  
+
   async updateCampaign(id: number, updatedCampaign: Partial<InsertCampaign>): Promise<Campaign | undefined> {
     const campaign = this.campaigns.get(id);
     if (!campaign) return undefined;
-    
+
     const updatedRecord: Campaign = {
       ...campaign,
       name: updatedCampaign.name !== undefined ? updatedCampaign.name : campaign.name,
@@ -326,21 +370,21 @@ export class MemStorage implements IStorage {
       guidelines: updatedCampaign.guidelines !== undefined ? updatedCampaign.guidelines : campaign.guidelines,
       callFlow: updatedCampaign.callFlow !== undefined ? updatedCampaign.callFlow : campaign.callFlow
     };
-    
+
     this.campaigns.set(id, updatedRecord);
     return updatedRecord;
   }
-  
+
   async deleteCampaign(id: number): Promise<boolean> {
     return this.campaigns.delete(id);
   }
-  
+
   async toggleCampaignStatus(id: number): Promise<Campaign | undefined> {
     const campaign = this.campaigns.get(id);
     if (!campaign) return undefined;
-    
+
     const newStatus = !(campaign.status === true);
-    
+
     const updatedCampaign: Campaign = {
       id: campaign.id,
       name: campaign.name,
@@ -354,7 +398,7 @@ export class MemStorage implements IStorage {
       guidelines: campaign.guidelines,
       callFlow: campaign.callFlow
     };
-    
+
     this.campaigns.set(id, updatedCampaign);
     return updatedCampaign;
   }
@@ -407,7 +451,7 @@ export class MemStorage implements IStorage {
       ...callHistory,
       status
     };
-    
+
     this.callHistories.set(id, updatedCallHistory);
     return updatedCallHistory;
   }
