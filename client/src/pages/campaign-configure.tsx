@@ -454,14 +454,7 @@ export default function CampaignConfigure() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="border-t pt-6">
-              <Button
-                className="w-full"
-                onClick={handleLaunchCampaign}
-              >
-                {campaignId ? "Update Campaign" : "Launch Campaign"}
-              </Button>
-            </CardFooter>
+
           </Card>
         </div>
       </div>

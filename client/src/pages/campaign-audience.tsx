@@ -7,6 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ChevronLeft, Upload, Trash2, Pencil, Check, UserPlus } from "lucide-react";
+
+// Define contact interface with status
+interface Contact {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+  status: string;
+}
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -171,7 +180,6 @@ export default function CampaignAudience() {
       .min(10, { message: "Phone number must be at least 10 digits" })
       .regex(/^\+?[0-9\s-]+$/, { message: "Invalid phone number format" }),
     email: z.string().email({ message: "Invalid email address" }),
-    status: z.string().default("Contact"),
   });
 
   type ContactFormValues = z.infer<typeof contactFormSchema>;
@@ -182,8 +190,7 @@ export default function CampaignAudience() {
     defaultValues: {
       name: "",
       phone: "",
-      email: "",
-      status: "Contact"
+      email: ""
     },
   });
 
@@ -202,7 +209,7 @@ export default function CampaignAudience() {
       name: data.name,
       phone: data.phone,
       email: data.email,
-      status: data.status,
+      status: "Contact", // Default status
     };
     
     setContacts([...contacts, newContact]);
@@ -459,34 +466,6 @@ export default function CampaignAudience() {
                             <FormControl>
                               <Input placeholder="john@example.com" {...field} />
                             </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="status"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Status</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                              value={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select a status" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="Contact">Contact</SelectItem>
-                                <SelectItem value="Client">Client</SelectItem>
-                                <SelectItem value="Lead">Lead</SelectItem>
-                                <SelectItem value="Prospect">Prospect</SelectItem>
-                              </SelectContent>
-                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
