@@ -132,9 +132,17 @@ export default function CampaignCreate() {
       };
       setConversationHistory([initialMessage]);
       speakText(initialMessage.content);
-      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to start call",
+        variant: "destructive",
+      });
+      return;
+    }
 
-      // Test the audio stream
+    // Test the audio stream
       const audioContext = new AudioContext();
       const source = audioContext.createMediaStreamSource(stream);
       const analyser = audioContext.createAnalyser();
