@@ -373,9 +373,9 @@ export default function CampaignCreate() {
       </div>
 
       {/* Main content */}
-      <div className="flex flex-col md:flex-row flex-1 overflow-y-auto md:overflow-hidden p-4 gap-4 relative">
+      <div className="flex flex-col md:flex-row h-[calc(100vh-12rem)] overflow-hidden p-4 gap-4">
         {/* Left panel - Campaign Instructions */}
-        <div className="w-full md:w-1/2 relative z-10 mb-6 md:mb-0">
+        <div className="w-full md:w-1/2 overflow-y-auto">
           <h2 className="text-lg font-semibold mb-2">Campaign Instructions</h2>
 
           <div className="mb-4">
