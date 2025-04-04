@@ -114,35 +114,19 @@ export default function CampaignCreate() {
     }
 
     try {
-      await navigator.mediaDevices.getUserMedia({ audio: true });
-      
-      if (!browserSupportsSpeechRecognition) {
-        throw new Error('Speech recognition not supported');
-      }
-      
-      setIsCallActive(true);
-      setConversationHistory([]);
-      resetTranscript();
-      
-      // Initial AI message
-      const userName = campaignTitle.split(' ')[0];
-      const initialMessage = {
-        role: "assistant",
-        content: `Hello, am I speaking with ${userName}?`
-      };
-      setConversationHistory([initialMessage]);
-      speakText(initialMessage.content);
-    } catch (error) {
-      console.error('Error:', error);
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to start call",
-        variant: "destructive",
+      // First request microphone access
+      await navigator.mediaDevices.getUserMedia({ 
+        audio: true
       });
-      return;
-    }
 
-    // Test the audio stream
+      // Start speech recognition
+      SpeechRecognition.startListening({ continuous: true });
+      
+      if (!stream) {
+        throw new Error('No audio stream available');
+      }
+
+      // Test the audio stream
       const audioContext = new AudioContext();
       const source = audioContext.createMediaStreamSource(stream);
       const analyser = audioContext.createAnalyser();
@@ -240,21 +224,26 @@ export default function CampaignCreate() {
   };
 
   useEffect(() => {
-    if (isCallActive && !listening) {
-      SpeechRecognition.startListening({ continuous: true, language: 'en-US' });
-    }
-  }, [isCallActive, listening]);
-
-  useEffect(() => {
     let timeout: NodeJS.Timeout;
     if (transcript && !isProcessing && isCallActive) {
+      // Wait for a short pause in speech before sending
       timeout = setTimeout(() => {
         handleSendMessage(transcript);
-        resetTranscript();
-      }, 1500);
+      }, 1000);
     }
     return () => clearTimeout(timeout);
-  }, [transcript]);
+  }, [transcript, isProcessing, isCallActive]);
+
+  useEffect(() => {
+    if (isCallActive) {
+      SpeechRecognition.startListening({ continuous: true, language: 'en-US' });
+    }
+    return () => {
+      if (isCallActive) {
+        SpeechRecognition.stopListening();
+      }
+    };
+  }, [isCallActive]);
 
   const handleSendMessage = async (messageContent?: string) => {
     const content = messageContent || userInput;
