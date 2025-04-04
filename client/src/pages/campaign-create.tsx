@@ -267,7 +267,7 @@ export default function CampaignCreate() {
   return (
     <div className="flex flex-col h-full">
       {/* Header bar */}
-      <div className="flex items-center justify-between p-4 border-b">
+      <div className="flex items-center justify-between p-2 sm:p-4 border-b">
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
@@ -373,9 +373,9 @@ export default function CampaignCreate() {
       </div>
 
       {/* Main content */}
-      <div className="flex flex-col md:flex-row h-[calc(100vh-12rem)] p-4 gap-4 max-h-screen overflow-hidden">
+      <div className="flex flex-col md:flex-row h-[calc(100vh-12rem)] p-2 sm:p-4 gap-4 max-h-screen overflow-hidden">
         {/* Left panel - Campaign Instructions */}
-        <div className="w-full md:w-1/2 flex flex-col min-h-0">
+        <div className="w-full md:w-1/2 flex flex-col min-h-0 mb-4 md:mb-0">
           <h2 className="text-lg font-semibold mb-2">Campaign Instructions</h2>
 
           <div className="mb-4">
@@ -544,7 +544,7 @@ export default function CampaignCreate() {
       </div>
 
       {/* Footer */}
-      <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between p-4 border-t">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between p-2 sm:p-4 border-t">
         <Button
           variant="outline"
           onClick={() => setLocation("/campaigns")}
