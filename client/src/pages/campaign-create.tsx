@@ -475,7 +475,7 @@ export default function CampaignCreate() {
           <h2 className="text-lg font-semibold mb-4">Test the Conversation</h2>
 
           {!isCallActive ? (
-            <div className="flex flex-col items-center justify-center h-[600px] bg-muted/30 rounded-lg">
+            <div className="flex flex-col items-center justify-center h-[500px] bg-muted/30 rounded-lg">
               <Button
                 size="lg"
                 className="mb-2"
@@ -488,7 +488,7 @@ export default function CampaignCreate() {
               </p>
             </div>
           ) : (
-            <Card className="flex flex-col h-full w-full">
+            <Card className="flex flex-col h-[500px] w-full">
               {/* Conversation display */}
               <div className="flex-1 p-4 overflow-y-auto">
                 {conversationHistory.map((message, index) => (
