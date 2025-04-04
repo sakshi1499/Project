@@ -114,24 +114,13 @@ export default function CampaignCreate() {
     }
 
     try {
-      const permissionResult = await navigator.permissions.query({ name: 'microphone' as PermissionName });
-      
-      if (permissionResult.state === 'denied') {
-        toast({
-          title: "Microphone Access Denied",
-          description: "Please enable microphone access in your browser settings and try again.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true
-        } 
+      // First request microphone access
+      await navigator.mediaDevices.getUserMedia({ 
+        audio: true
       });
+
+      // Start speech recognition
+      SpeechRecognition.startListening({ continuous: true });
       
       if (!stream) {
         throw new Error('No audio stream available');
