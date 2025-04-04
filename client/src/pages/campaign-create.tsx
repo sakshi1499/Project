@@ -514,32 +514,31 @@ export default function CampaignCreate() {
                     <span className="text-sm">Waiting for AI...</span>
                   </div>
                 )}
-                  <Button
-                    size="icon"
-                    variant="destructive"
-                    onClick={endCall}
+                <Button
+                  size="icon"
+                  variant="destructive"
+                  onClick={endCall}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M16 2v4" />
-                      <path d="M8 2v4" />
-                      <path d="M3 10h18" />
-                      <path d="M19.5 12.5L12 20" />
-                      <path d="M19.5 19.5L17 22" />
-                      <path d="M12 15l-4.5 7.5" />
-                      <path d="M4 13l3 3" />
-                    </svg>
-                  </Button>
-                </div>
+                    <path d="M16 2v4" />
+                    <path d="M8 2v4" />
+                    <path d="M3 10h18" />
+                    <path d="M19.5 12.5L12 20" />
+                    <path d="M19.5 19.5L17 22" />
+                    <path d="M12 15l-4.5 7.5" />
+                    <path d="M4 13l3 3" />
+                  </svg>
+                </Button>
               </div>
             </Card>
           )}
