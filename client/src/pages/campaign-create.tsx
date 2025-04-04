@@ -113,6 +113,20 @@ export default function CampaignCreate() {
       return;
     }
 
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      if (!stream) {
+        throw new Error('No audio stream available');
+      }
+    } catch (error) {
+      toast({
+        title: "Microphone Access Required",
+        description: "Please allow microphone access to use voice chat.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!isOpenAIConfigured()) {
       toast({
         title: "API Key Required",
@@ -191,10 +205,26 @@ export default function CampaignCreate() {
   };
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout;
     if (transcript && !isProcessing && isCallActive) {
-      handleSendMessage(transcript);
+      // Wait for a short pause in speech before sending
+      timeout = setTimeout(() => {
+        handleSendMessage(transcript);
+      }, 1000);
     }
-  }, [transcript]);
+    return () => clearTimeout(timeout);
+  }, [transcript, isProcessing, isCallActive]);
+
+  useEffect(() => {
+    if (isCallActive) {
+      SpeechRecognition.startListening({ continuous: true, language: 'en-US' });
+    }
+    return () => {
+      if (isCallActive) {
+        SpeechRecognition.stopListening();
+      }
+    };
+  }, [isCallActive]);
 
   const handleSendMessage = async (messageContent?: string) => {
     const content = messageContent || userInput;
