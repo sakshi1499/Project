@@ -260,8 +260,8 @@ export default function CampaignAudience() {
       </div>
 
       {/* Tabs navigation */}
-      <div className="flex border-b">
-        <div className="flex-1 text-center py-3 text-muted-foreground">
+      <div className="flex overflow-x-auto border-b">
+        <div className="flex-1 min-w-[160px] text-center py-3 text-muted-foreground">
           <span className="inline-flex items-center">
             <svg
               className="mr-2 h-4 w-4"
@@ -278,10 +278,10 @@ export default function CampaignAudience() {
               <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
               <polyline points="14 2 14 8 20 8" />
             </svg>
-            Craft your Message
+            <span className="whitespace-nowrap">Craft your Message</span>
           </span>
         </div>
-        <div className="flex-1 text-center py-3 border-b-2 border-primary">
+        <div className="flex-1 min-w-[160px] text-center py-3 border-b-2 border-primary">
           <span className="inline-flex items-center">
             <svg
               className="mr-2 h-4 w-4"
@@ -300,10 +300,10 @@ export default function CampaignAudience() {
               <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
               <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
-            Add your audience
+            <span className="whitespace-nowrap">Add your audience</span>
           </span>
         </div>
-        <div className="flex-1 text-center py-3 text-muted-foreground">
+        <div className="flex-1 min-w-[160px] text-center py-3 text-muted-foreground">
           <span className="inline-flex items-center">
             <svg
               className="mr-2 h-4 w-4"
@@ -320,7 +320,7 @@ export default function CampaignAudience() {
               <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
               <circle cx="12" cy="12" r="3" />
             </svg>
-            Configure & Launch
+            <span className="whitespace-nowrap">Configure & Launch</span>
           </span>
         </div>
       </div>
@@ -533,13 +533,12 @@ export default function CampaignAudience() {
                   <TableHead>Name</TableHead>
                   <TableHead className="hidden sm:table-cell">Phone</TableHead>
                   <TableHead className="hidden md:table-cell">Email</TableHead>
-                  <TableHead className="hidden lg:table-cell">Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredContacts.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-28 text-muted-foreground">
+                    <TableCell colSpan={4} className="text-center py-28 text-muted-foreground">
                       No contacts found
                     </TableCell>
                   </TableRow>
@@ -555,7 +554,6 @@ export default function CampaignAudience() {
                       <TableCell className="font-medium">{contact.name}</TableCell>
                       <TableCell className="hidden sm:table-cell">{contact.phone}</TableCell>
                       <TableCell className="hidden md:table-cell">{contact.email}</TableCell>
-                      <TableCell className="hidden lg:table-cell">{contact.status}</TableCell>
                     </TableRow>
                   ))
                 )}

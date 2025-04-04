@@ -163,8 +163,8 @@ export default function CampaignConfigure() {
       </div>
 
       {/* Tabs navigation */}
-      <div className="flex border-b">
-        <div className="flex-1 text-center py-3 text-muted-foreground">
+      <div className="flex overflow-x-auto border-b">
+        <div className="flex-1 min-w-[160px] text-center py-3 text-muted-foreground">
           <span className="inline-flex items-center">
             <svg
               className="mr-2 h-4 w-4"
@@ -181,10 +181,10 @@ export default function CampaignConfigure() {
               <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
               <polyline points="14 2 14 8 20 8" />
             </svg>
-            Craft your Message
+            <span className="whitespace-nowrap">Craft your Message</span>
           </span>
         </div>
-        <div className="flex-1 text-center py-3 text-muted-foreground">
+        <div className="flex-1 min-w-[160px] text-center py-3 text-muted-foreground">
           <span className="inline-flex items-center">
             <svg
               className="mr-2 h-4 w-4"
@@ -203,10 +203,10 @@ export default function CampaignConfigure() {
               <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
               <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
-            Add your audience
+            <span className="whitespace-nowrap">Add your audience</span>
           </span>
         </div>
-        <div className="flex-1 text-center py-3 border-b-2 border-primary">
+        <div className="flex-1 min-w-[160px] text-center py-3 border-b-2 border-primary">
           <span className="inline-flex items-center">
             <svg
               className="mr-2 h-4 w-4"
@@ -223,7 +223,7 @@ export default function CampaignConfigure() {
               <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
               <circle cx="12" cy="12" r="3" />
             </svg>
-            Configure & Launch
+            <span className="whitespace-nowrap">Configure & Launch</span>
           </span>
         </div>
       </div>
@@ -297,22 +297,53 @@ export default function CampaignConfigure() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="start-time">Start Time</Label>
-                  <Input
-                    id="start-time"
-                    type="time"
+                  <Select
                     value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                  />
+                    onValueChange={setStartTime}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select start time" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="08:00">8:00 AM</SelectItem>
+                      <SelectItem value="09:00">9:00 AM</SelectItem>
+                      <SelectItem value="10:00">10:00 AM</SelectItem>
+                      <SelectItem value="11:00">11:00 AM</SelectItem>
+                      <SelectItem value="12:00">12:00 PM</SelectItem>
+                      <SelectItem value="13:00">1:00 PM</SelectItem>
+                      <SelectItem value="14:00">2:00 PM</SelectItem>
+                      <SelectItem value="15:00">3:00 PM</SelectItem>
+                      <SelectItem value="16:00">4:00 PM</SelectItem>
+                      <SelectItem value="17:00">5:00 PM</SelectItem>
+                      <SelectItem value="18:00">6:00 PM</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 
                 <div className="space-y-2">
                   <Label htmlFor="end-time">End Time</Label>
-                  <Input
-                    id="end-time"
-                    type="time"
+                  <Select
                     value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                  />
+                    onValueChange={setEndTime}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select end time" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="09:00">9:00 AM</SelectItem>
+                      <SelectItem value="10:00">10:00 AM</SelectItem>
+                      <SelectItem value="11:00">11:00 AM</SelectItem>
+                      <SelectItem value="12:00">12:00 PM</SelectItem>
+                      <SelectItem value="13:00">1:00 PM</SelectItem>
+                      <SelectItem value="14:00">2:00 PM</SelectItem>
+                      <SelectItem value="15:00">3:00 PM</SelectItem>
+                      <SelectItem value="16:00">4:00 PM</SelectItem>
+                      <SelectItem value="17:00">5:00 PM</SelectItem>
+                      <SelectItem value="18:00">6:00 PM</SelectItem>
+                      <SelectItem value="19:00">7:00 PM</SelectItem>
+                      <SelectItem value="20:00">8:00 PM</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               
@@ -445,11 +476,10 @@ export default function CampaignConfigure() {
           Back
         </Button>
         <Button 
-          variant="outline" 
-          onClick={handleSaveAsDraft}
+          onClick={handleLaunchCampaign}
           className="w-full sm:w-auto"
         >
-          Save as Draft
+          {campaignId ? "Update Campaign" : "Launch Campaign"}
         </Button>
       </div>
     </div>
