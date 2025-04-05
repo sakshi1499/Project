@@ -477,7 +477,9 @@ export default function CampaignCreate() {
                   >
                     {message.role === "assistant" && (
                       <div className="w-8 h-8 rounded-full overflow-hidden bg-zinc-800 flex-shrink-0">
-                        <img src="/agent-avatar.png" alt="AI Agent" className="w-full h-full object-cover" />
+                        <img src="/assistant-avatar.png" alt="AI Agent" className="w-full h-full object-cover" onError={(e) => {
+                          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 16v-4'/%3E%3Cpath d='M12 8h.01'/%3E%3C/svg%3E";
+                        }} />
                       </div>
                     )}
                     <div
@@ -490,11 +492,12 @@ export default function CampaignCreate() {
                       {message.content}
                     </div>
                     {message.role === "user" && (
-                      <div className="w-8 h-8 rounded-full overflow-hidden bg-[#8257E6] flex-shrink-0 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                          <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-[#8257E6] flex-shrink-0">
+                        <img 
+                          src={auth?.currentUser?.photoURL || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E"} 
+                          alt="User" 
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                     )}
                   </div>
