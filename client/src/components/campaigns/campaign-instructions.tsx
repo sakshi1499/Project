@@ -16,7 +16,7 @@ interface CampaignInstructionsProps {
 }
 
 const CampaignInstructions: React.FC<CampaignInstructionsProps> = ({
-  selectedVoice,
+  selectedVoice = "indian-male",
   setSelectedVoice,
   campaignInstructions,
   setCampaignInstructions,
