@@ -92,24 +92,70 @@ const Dashboard = () => {
           </Card>
         </div>
 
-        {/* Leads per Month Chart */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Leads per Month</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyLeadsData}>
-                  <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                  <Bar dataKey="leads" fill="#8884d8" radius={[4, 4, 0, 0]} />
-                  <Tooltip />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Charts Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          {/* Leads per Month Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-medium">Leads per Month</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={monthlyLeadsData}>
+                    <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+                    <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+                    <Bar dataKey="leads" fill="#8884d8" radius={[4, 4, 0, 0]} />
+                    <Tooltip />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Campaign Overview Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-medium">Campaign Overview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={[
+                        { name: 'Hot Leads', value: 25, color: '#FF6B6B' },
+                        { name: 'Interested', value: 35, color: '#4ECDC4' },
+                        { name: 'Not Connected', value: 15, color: '#95A5A6' },
+                        { name: 'Not Interested', value: 10, color: '#E74C3C' },
+                        { name: 'Follow Up', value: 20, color: '#F39C12' },
+                        { name: 'Pending', value: 15, color: '#BDC3C7' }
+                      ]}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      label={(entry) => `${entry.name}: ${entry.value}%`}
+                    >
+                      {[
+                        { name: 'Hot Leads', value: 25, color: '#FF6B6B' },
+                        { name: 'Interested', value: 35, color: '#4ECDC4' },
+                        { name: 'Not Connected', value: 15, color: '#95A5A6' },
+                        { name: 'Not Interested', value: 10, color: '#E74C3C' },
+                        { name: 'Follow Up', value: 20, color: '#F39C12' },
+                        { name: 'Pending', value: 15, color: '#BDC3C7' }
+                      ].map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
