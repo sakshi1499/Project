@@ -1,7 +1,7 @@
 
 import PageHeader from "@/components/layout/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, LineChart, Line, PieChart, Pie, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, LineChart, Line, PieChart, Pie, Cell, Legend } from "recharts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Phone, UserCheck, Clock, TrendingUp } from "lucide-react";
 
@@ -136,7 +136,7 @@ const Dashboard = () => {
                       cx="50%"
                       cy="50%"
                       outerRadius={80}
-                      label={(entry) => `${entry.name}: ${entry.value}%`}
+                      labelLine={false}
                     >
                       {[
                         { name: 'Hot Leads', value: 25, color: '#FF6B6B' },
@@ -150,6 +150,12 @@ const Dashboard = () => {
                       ))}
                     </Pie>
                     <Tooltip />
+                    <Legend 
+                      layout="vertical"
+                      align="right"
+                      verticalAlign="middle"
+                      formatter={(value, entry) => `${value} (${entry.payload.value}%)`}
+                    />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
