@@ -1,11 +1,39 @@
 import PageHeader from "@/components/layout/page-header";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
-import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, ResponsiveContainer, Tooltip } from "recharts";
-import { Phone, Percent, Users, ArrowUpRight, ThumbsUp, MessageCircle } from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  PieChart,
+  Pie,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
+import {
+  Phone,
+  Percent,
+  Users,
+  ArrowUpRight,
+  ThumbsUp,
+  MessageCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Link } from "wouter";
 
 // Sample data for the dashboard
@@ -81,7 +109,9 @@ const Dashboard = () => {
               <SelectValue placeholder="Campaign" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="construction">Construction Campaign</SelectItem>
+              <SelectItem value="construction">
+                Construction Campaign
+              </SelectItem>
               <SelectItem value="realEstate">Real Estate Campaign</SelectItem>
               <SelectItem value="all">All Campaigns</SelectItem>
             </SelectContent>
@@ -90,62 +120,54 @@ const Dashboard = () => {
 
         {/* Key Metrics */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm h-[120px]">
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm h-[120px]">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Calls
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">
-                {totalCalls}
-              </div>
+              <div className="text-3xl font-bold">{totalCalls}</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm">
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Conversion Rate
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">
-                {conversionRate}%
-              </div>
+              <div className="text-3xl font-bold">{conversionRate}%</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm">
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Leads
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">
-                {totalLeads}
-              </div>
+              <div className="text-3xl font-bold">{totalLeads}</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm">
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Follow Up
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">
-                {followUp}
-              </div>
+              <div className="text-3xl font-bold">{followUp}</div>
             </CardContent>
           </Card>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {/* Monthly Leads Chart */}
-          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm h-[300px]">
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm h-[300px]">
             <CardHeader className="pb-2">
               <CardTitle>Leads per Month</CardTitle>
             </CardHeader>
@@ -154,17 +176,17 @@ const Dashboard = () => {
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={monthlyLeadsData}>
                     <XAxis dataKey="name" tickLine={false} axisLine={false} />
-                    <YAxis 
-                      tickLine={false} 
-                      axisLine={false} 
-                      tickFormatter={(value) => `${value}`} 
+                    <YAxis
+                      tickLine={false}
+                      axisLine={false}
+                      tickFormatter={(value) => `${value}`}
                       domain={[0, 3000]}
                       ticks={[0, 1500, 3000]}
                     />
-                    <Tooltip cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }} />
-                    <Bar 
-                      dataKey="leads" 
-                      fill="#a3a0fb" 
+                    <Tooltip cursor={{ fill: "rgba(255, 255, 255, 0.05)" }} />
+                    <Bar
+                      dataKey="leads"
+                      fill="#a3a0fb"
                       radius={[4, 4, 0, 0]}
                       barSize={35}
                       fillOpacity={0.9}
@@ -176,7 +198,7 @@ const Dashboard = () => {
           </Card>
 
           {/* Campaign Overview */}
-          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm h-[300px]">
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm h-[300px]">
             <CardHeader className="pb-2">
               <CardTitle>Campaign Overview</CardTitle>
             </CardHeader>
@@ -186,12 +208,36 @@ const Dashboard = () => {
                   <PieChart>
                     <Pie
                       data={[
-                        { name: 'Hot Leads', value: campaignStatusData.hotLeads, fill: '#22c55e' },
-                        { name: 'Interested', value: campaignStatusData.interested, fill: '#86efac' },
-                        { name: 'Not Connected', value: campaignStatusData.notConnected, fill: '#fca5a5' },
-                        { name: 'Not Interested', value: campaignStatusData.notInterested, fill: '#ef4444' },
-                        { name: 'Follow Up', value: campaignStatusData.followUp, fill: '#fb923c' },
-                        { name: 'Pending', value: campaignStatusData.pending, fill: '#d1d5db' }
+                        {
+                          name: "Hot Leads",
+                          value: campaignStatusData.hotLeads,
+                          fill: "#22c55e",
+                        },
+                        {
+                          name: "Interested",
+                          value: campaignStatusData.interested,
+                          fill: "#86efac",
+                        },
+                        {
+                          name: "Not Connected",
+                          value: campaignStatusData.notConnected,
+                          fill: "#fca5a5",
+                        },
+                        {
+                          name: "Not Interested",
+                          value: campaignStatusData.notInterested,
+                          fill: "#ef4444",
+                        },
+                        {
+                          name: "Follow Up",
+                          value: campaignStatusData.followUp,
+                          fill: "#fb923c",
+                        },
+                        {
+                          name: "Pending",
+                          value: campaignStatusData.pending,
+                          fill: "#d1d5db",
+                        },
                       ]}
                       cx="50%"
                       cy="50%"
@@ -209,7 +255,7 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Frequent Responses */}
-          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm h-[300px]">
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm h-[300px]">
             <CardHeader className="pb-2">
               <CardTitle>Frequent responses from Customers</CardTitle>
             </CardHeader>
@@ -220,7 +266,10 @@ const Dashboard = () => {
                   <div>Percentage</div>
                 </div>
                 {frequentResponses.map((item, index) => (
-                  <div key={index} className="grid grid-cols-2 text-sm border-t pt-2">
+                  <div
+                    key={index}
+                    className="grid grid-cols-2 text-sm border-t pt-2"
+                  >
                     <div>{item.question}</div>
                     <div>{item.percentage}%</div>
                   </div>
@@ -230,15 +279,17 @@ const Dashboard = () => {
           </Card>
 
           {/* Script Analysis */}
-          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm">
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle>Script Analysis</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <div className="mb-2 text-sm font-medium">High value words</div>
-                  <div className="space-y-2">
+                  <div className="mb-4 text-sm font-medium">
+                    High value words
+                  </div>
+                  <div className="space-y-6">
                     {highValueWords.map((item, index) => (
                       <div key={index} className="flex items-center text-sm">
                         <span className="mr-2">{item.icon}</span>
@@ -248,8 +299,10 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <div>
-                  <div className="mb-2 text-sm font-medium">Low Value words</div>
-                  <div className="space-y-2">
+                  <div className="mb-4 text-sm font-medium">
+                    Low Value words
+                  </div>
+                  <div className="space-y-6">
                     {lowValueWords.map((item, index) => (
                       <div key={index} className="flex items-center text-sm">
                         <span className="mr-2">{item.icon}</span>
