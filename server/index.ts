@@ -1,6 +1,16 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL environment variable is required");
+}
+
+const connectionString = process.env.DATABASE_URL;
+const client = postgres(connectionString);
+export const db = drizzle(client);
 
 const app = express();
 app.use(express.json());
