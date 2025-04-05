@@ -262,39 +262,15 @@ export default function CampaignCreate() {
     setUserInput("");
 
     try {
-      // Create system message from campaign instructions
-      const systemMessage = { role: "system", content: campaignInstructions };
-
-      // Prepare messages for API call
-      const messages = [
-        systemMessage,
-        ...conversationHistory,
-        userMessage
-      ];
-
-      // Call OpenAI API
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: "gpt-4",
-          messages: messages,
-          temperature: 0.7,
-          max_tokens: 150
-        })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        console.error('OpenAI API error:', errorData);
-        throw new Error(`API error: ${response.status}`);
+      if (!chat.current) {
+        chat.current = await startConversation();
+        // Send initial context
+        await chat.current.sendMessage(campaignInstructions);
       }
 
-      const data = await response.json();
-      const aiResponse = data.choices[0].message.content;
+      // Send message to Gemini
+      const result = await chat.current.sendMessage(content.trim());
+      const aiResponse = await result.response.text();
 
       // Add AI response to conversation
       const assistantMessage = { role: "assistant", content: aiResponse };
