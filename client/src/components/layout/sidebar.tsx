@@ -43,7 +43,7 @@ const NavItem = ({
           "flex items-center gap-3 px-4 py-2.5 rounded-md transition-colors cursor-pointer",
           isActive
             ? "bg-muted/50 text-foreground font-medium"
-            : "text-muted-foreground hover:bg-muted/30 hover:text-foreground"
+            : "text-muted-foreground hover:bg-muted/30 hover:text-foreground",
         )}
       >
         <Icon className="h-5 w-5" />
@@ -61,7 +61,7 @@ const NavItem = ({
 const Sidebar = () => {
   const [_, setLocation] = useLocation();
   const { toast } = useToast();
-  
+
   const handleLogout = async () => {
     try {
       if (auth) {
@@ -70,12 +70,12 @@ const Sidebar = () => {
       }
       // Clear local authentication state
       localStorage.removeItem("authenticated");
-      
+
       toast({
         title: "Logged out",
         description: "You have been successfully logged out.",
       });
-      
+
       // Redirect to login page
       setLocation("/login");
     } catch (error) {
@@ -98,13 +98,15 @@ const Sidebar = () => {
               <div className="flex items-center justify-between rounded-md p-2 bg-muted/10 cursor-pointer hover:bg-muted/20 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className="w-8 h-8 rounded-full bg-muted/20 flex items-center justify-center overflow-hidden">
-                    <img 
-                      src="https://ui-avatars.com/api/?name=Shiva+Chintaluru&background=random" 
+                    <img
+                      src="https://ui-avatars.com/api/?name=Shiva+Chintaluru&background=random"
                       alt="User"
                       className="h-full w-full object-cover"
                     />
                   </div>
-                  <span className="font-medium text-foreground">Shiva Chintaluru</span>
+                  <span className="font-medium text-foreground">
+                    Shiva Chintaluru
+                  </span>
                 </div>
                 <ChevronDown className="h-4 w-4 text-foreground/70" />
               </div>
@@ -129,7 +131,7 @@ const Sidebar = () => {
             Dashboard
           </NavItem>
 
-          <NavItem href="/campaign-create" icon={Mic} badge={9}>
+          <NavItem href="/campaigns" icon={Mic} badge={9}>
             Voice Campaigns
           </NavItem>
 
@@ -148,9 +150,7 @@ const Sidebar = () => {
 
         {/* ProxyTalk text at the bottom */}
         <div className="p-4 mt-auto">
-          <div className="text-foreground text-center">
-            ProxyTalk
-          </div>
+          <div className="text-foreground text-center">ProxyTalk</div>
         </div>
       </div>
     </aside>
