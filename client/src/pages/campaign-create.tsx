@@ -229,21 +229,34 @@ export default function CampaignCreate() {
   };
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    const SPEECH_PAUSE = 500; // Reduced pause time for faster response
+    if (!browserSupportsSpeechRecognition) {
+      console.error('Speech recognition is not supported');
+      return;
+    }
 
-    if (!isProcessing && isCallActive && transcript) {
-      resetTranscript(); // Reset transcript immediately to prevent duplicates
-      
-      timeout = setTimeout(() => {
-        handleSendMessage(transcript.trim());
-      }, SPEECH_PAUSE);
+    let recognitionTimeout: NodeJS.Timeout;
+    
+    if (isCallActive && transcript && !isProcessing) {
+      // Only process after a brief pause in speaking
+      recognitionTimeout = setTimeout(() => {
+        if (transcript.trim()) {
+          handleSendMessage(transcript);
+          resetTranscript();
+        }
+      }, 1000);
     }
 
     return () => {
-      if (timeout) clearTimeout(timeout);
+      if (recognitionTimeout) clearTimeout(recognitionTimeout);
     };
-  }, [transcript, isProcessing, isCallActive]);
+  }, [transcript, isCallActive, isProcessing]);
+
+  // Keep recognition active during the call
+  useEffect(() => {
+    if (isCallActive && !listening && !isSpeaking) {
+      SpeechRecognition.startListening({ continuous: true });
+    }
+  }, [isCallActive, listening, isSpeaking]);
 
   useEffect(() => {
     if (isCallActive) {
@@ -454,23 +467,36 @@ export default function CampaignCreate() {
           ) : (
             <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm flex flex-col flex-1 w-full">
               {/* Conversation display */}
-              <div className="flex-1 p-4">
+              <div className="flex-1 p-4 space-y-4">
                 {conversationHistory.map((message, index) => (
                   <div
                     key={index}
-                    className={`mb-4 ${
-                      message.role === "assistant" ? "text-left" : "text-right"
+                    className={`flex items-start gap-3 ${
+                      message.role === "assistant" ? "" : "justify-end"
                     }`}
                   >
+                    {message.role === "assistant" && (
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-zinc-700 flex-shrink-0">
+                        <img src="/agent-avatar.png" alt="AI Agent" className="w-full h-full object-cover" />
+                      </div>
+                    )}
                     <div
-                      className={`inline-block rounded-lg px-4 py-2 max-w-[80%] ${
+                      className={`rounded-lg px-4 py-2 max-w-[80%] ${
                         message.role === "assistant"
-                          ? "bg-muted"
-                          : "bg-primary text-primary-foreground"
+                          ? "bg-zinc-800"
+                          : "bg-zinc-700"
                       }`}
                     >
                       {message.content}
                     </div>
+                    {message.role === "user" && (
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-zinc-700 flex-shrink-0 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                          <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                      </div>
+                    )}
                   </div>
                 ))}
                 
