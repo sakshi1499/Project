@@ -90,7 +90,7 @@ const Dashboard = () => {
 
         {/* Key Metrics */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <Card className="bg-zinc-900 border-none shadow-sm h-[120px]">
+          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm h-[120px]">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Calls
@@ -103,7 +103,7 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-zinc-900 border-none shadow-sm">
+          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Conversion Rate
@@ -116,7 +116,7 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-zinc-900 border-none shadow-sm">
+          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Leads
@@ -129,7 +129,7 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-zinc-900 border-none shadow-sm">
+          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Follow Up
@@ -145,7 +145,7 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {/* Monthly Leads Chart */}
-          <Card className="bg-zinc-900 border-none shadow-sm h-[300px]">
+          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm h-[300px]">
             <CardHeader className="pb-2">
               <CardTitle>Leads per Month</CardTitle>
             </CardHeader>
@@ -176,7 +176,7 @@ const Dashboard = () => {
           </Card>
 
           {/* Campaign Overview */}
-          <Card className="bg-zinc-900 border-none shadow-sm h-[300px]">
+          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm h-[300px]">
             <CardHeader className="pb-2">
               <CardTitle>Campaign Overview</CardTitle>
             </CardHeader>
@@ -209,7 +209,7 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Frequent Responses */}
-          <Card className="bg-zinc-900 border-none shadow-sm h-[300px]">
+          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm h-[300px]">
             <CardHeader className="pb-2">
               <CardTitle>Frequent responses from Customers</CardTitle>
             </CardHeader>
@@ -230,7 +230,7 @@ const Dashboard = () => {
           </Card>
 
           {/* Script Analysis */}
-          <Card className="bg-zinc-900 border-none shadow-sm">
+          <Card className="bg-zinc-800/50 dark:bg-zinc-800/50 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle>Script Analysis</CardTitle>
             </CardHeader>
