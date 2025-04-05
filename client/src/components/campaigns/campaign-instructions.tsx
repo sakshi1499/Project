@@ -16,11 +16,17 @@ interface CampaignInstructionsProps {
 }
 
 const CampaignInstructions: React.FC<CampaignInstructionsProps> = ({
-  selectedVoice = "indian-male",
+  selectedVoice,
   setSelectedVoice,
   campaignInstructions,
   setCampaignInstructions,
 }) => {
+  React.useEffect(() => {
+    if (!selectedVoice) {
+      setSelectedVoice("indian-male");
+    }
+  }, []);
+
   return (
     <div className="flex flex-col h-full min-h-0 bg-zinc-200 dark:bg-zinc-800 rounded-lg p-4">
       <div className="flex items-center gap-2 mb-4">
@@ -28,9 +34,9 @@ const CampaignInstructions: React.FC<CampaignInstructionsProps> = ({
       </div>
 
       <div className="mb-4">
-        <Select defaultValue="indian-male" value={selectedVoice} onValueChange={setSelectedVoice}>
+        <Select value={selectedVoice || "indian-male"} onValueChange={setSelectedVoice}>
           <SelectTrigger>
-            <SelectValue />
+            <SelectValue defaultValue="indian-male">Indian Male Voice</SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="indian-male">
