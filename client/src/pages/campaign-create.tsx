@@ -21,6 +21,8 @@ import Waveform from "@/components/ui/waveform";
 // @ts-ignore
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
+import { startConversation } from '@/lib/gemini';
+
 // Check if the OpenAI API key is available
 const isOpenAIConfigured = () => {
   return import.meta.env.VITE_OPENAI_API_KEY !== undefined;
@@ -29,6 +31,7 @@ const isOpenAIConfigured = () => {
 export default function CampaignCreate() {
   const [location, setLocation] = useLocation();
   const { toast } = useToast();
+  const chat = useRef<Awaited<ReturnType<typeof startConversation>> | null>(null);
 
   // Extract campaign ID from URL if provided for editing
   const searchParams = new URLSearchParams(window.location.search);
