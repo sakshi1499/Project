@@ -432,7 +432,7 @@ export default function CampaignCreate() {
       </div>
 
       {/* Main content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2 sm:p-4 h-[calc(100vh-12rem)]">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2 sm:p-4 h-[calc(100vh-12rem)] bg-zinc-200 dark:bg-zinc-800">
         {/* Left panel - Campaign Instructions */}
         <div className="flex flex-col h-full">
           <h2 className="text-lg font-semibold mb-2">Campaign Instructions</h2>

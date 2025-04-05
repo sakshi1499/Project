@@ -229,7 +229,7 @@ export default function CampaignConfigure() {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 p-4 overflow-y-auto">
+      <div className="flex-1 p-4 overflow-y-auto bg-zinc-200 dark:bg-zinc-800">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {/* Campaign Schedule */}
           <Card>
