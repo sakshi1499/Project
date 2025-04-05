@@ -89,7 +89,6 @@ const Billing = () => {
                 </div>
               </div>
             </CardContent>
-            </CardContent>
             <CardFooter>
               <Dialog>
                 <DialogTrigger asChild>
