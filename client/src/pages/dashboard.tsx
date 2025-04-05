@@ -90,7 +90,7 @@ const Dashboard = () => {
 
         {/* Key Metrics */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <Card className="bg-card border-none shadow-sm">
+          <Card className="bg-card border-none shadow-sm h-[120px]">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Calls
@@ -145,12 +145,12 @@ const Dashboard = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {/* Monthly Leads Chart */}
-          <Card className="bg-card border-none shadow-sm">
+          <Card className="bg-card border-none shadow-sm h-[300px]">
             <CardHeader className="pb-2">
               <CardTitle>Leads per Month</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-[180px]">
+              <div className="h-[220px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={monthlyLeadsData}>
                     <XAxis dataKey="name" tickLine={false} axisLine={false} />
@@ -176,12 +176,12 @@ const Dashboard = () => {
           </Card>
           
           {/* Campaign Overview */}
-          <Card className="bg-card border-none shadow-sm">
+          <Card className="bg-card border-none shadow-sm h-[300px]">
             <CardHeader className="pb-2">
               <CardTitle>Campaign Overview</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-[180px]">
+              <div className="h-[220px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -209,7 +209,7 @@ const Dashboard = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Frequent Responses */}
-          <Card className="bg-card border-none shadow-sm">
+          <Card className="bg-card border-none shadow-sm h-[300px]">
             <CardHeader className="pb-2">
               <CardTitle>Frequent responses from Customers</CardTitle>
             </CardHeader>
