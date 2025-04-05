@@ -12,16 +12,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { ChevronLeft, Mic, MicOff, Play, Send, Pencil, Check } from "lucide-react";
+import {
+  ChevronLeft,
+  Mic,
+  MicOff,
+  Play,
+  Send,
+  Pencil,
+  Check,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import type { Campaign } from "@shared/schema";
 import Waveform from "@/components/ui/waveform";
 
 // @ts-ignore
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
-import { startConversation } from '@/lib/gemini';
+import { startConversation } from "@/lib/gemini";
 
 // Check if the Gemini API key is available
 const isGeminiConfigured = () => {
@@ -31,29 +41,35 @@ const isGeminiConfigured = () => {
 export default function CampaignCreate() {
   const [location, setLocation] = useLocation();
   const { toast } = useToast();
-  const chat = useRef<Awaited<ReturnType<typeof startConversation>> | null>(null);
+  const chat = useRef<Awaited<ReturnType<typeof startConversation>> | null>(
+    null,
+  );
 
   // Extract campaign ID from URL if provided for editing
   const searchParams = new URLSearchParams(window.location.search);
-  const campaignId = searchParams.get('id') ? parseInt(searchParams.get('id') as string) : undefined;
+  const campaignId = searchParams.get("id")
+    ? parseInt(searchParams.get("id") as string)
+    : undefined;
   const [selectedVoice, setSelectedVoice] = useState("indian-male");
   const [isProcessing, setIsProcessing] = useState(false);
   const [campaignTitle, setCampaignTitle] = useState("Construction Campaign");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [campaignInstructions, setCampaignInstructions] = useState(
     "Objective: AI sales representative for Aparna Sarovar luxury apartments. Focus on securing site visits.\n\n" +
-    "Guidelines:\n" +
-    "• Introduce as Amit from Aparna Sarovar\n" +
-    "• Keep responses brief and professional\n" +
-    "• Guide towards site visit booking\n" +
-    "• Address concerns while maintaining visit focus\n" +
-    "• Follow compliance and privacy rules\n\n" +
-    "Sample Prompt:\n" +
-    "\"Hello, am I speaking with [Customer Name]?\""
+      "Guidelines:\n" +
+      "• Introduce as Amit from Aparna Sarovar\n" +
+      "• Keep responses brief and professional\n" +
+      "• Guide towards site visit booking\n" +
+      "• Address concerns while maintaining visit focus\n" +
+      "• Follow compliance and privacy rules\n\n" +
+      "Sample Prompt:\n" +
+      '"Hello, am I speaking with [Customer Name]?"',
   );
 
   // State for conversation
-  const [conversationHistory, setConversationHistory] = useState<{ role: string; content: string }[]>([]);
+  const [conversationHistory, setConversationHistory] = useState<
+    { role: string; content: string }[]
+  >([]);
   const [userInput, setUserInput] = useState("");
   const [isCallActive, setIsCallActive] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -63,23 +79,24 @@ export default function CampaignCreate() {
     transcript,
     listening,
     resetTranscript,
-    browserSupportsSpeechRecognition
+    browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
 
   // Speech synthesis
-  const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
+  const synth = typeof window !== "undefined" ? window.speechSynthesis : null;
 
   // Load campaign data if editing an existing campaign
-  const { data: campaignData, isLoading: isLoadingCampaign } = useQuery<Campaign>({
-    queryKey: ['/api/campaigns', campaignId],
-    queryFn: async () => {
-      if (!campaignId) return null;
-      const response = await fetch(`/api/campaigns/${campaignId}`);
-      if (!response.ok) throw new Error('Failed to load campaign');
-      return response.json();
-    },
-    enabled: !!campaignId
-  });
+  const { data: campaignData, isLoading: isLoadingCampaign } =
+    useQuery<Campaign>({
+      queryKey: ["/api/campaigns", campaignId],
+      queryFn: async () => {
+        if (!campaignId) return null;
+        const response = await fetch(`/api/campaigns/${campaignId}`);
+        if (!response.ok) throw new Error("Failed to load campaign");
+        return response.json();
+      },
+      enabled: !!campaignId,
+    });
 
   // Update state with campaign data when loaded
   useEffect(() => {
@@ -111,7 +128,8 @@ export default function CampaignCreate() {
     if (!browserSupportsSpeechRecognition) {
       toast({
         title: "Browser Error",
-        description: "Your browser doesn't support speech recognition. Please use Chrome.",
+        description:
+          "Your browser doesn't support speech recognition. Please use Chrome.",
         variant: "destructive",
       });
       return;
@@ -120,7 +138,8 @@ export default function CampaignCreate() {
     if (!isGeminiConfigured()) {
       toast({
         title: "API Key Required",
-        description: "Gemini API key is required for voice agent functionality.",
+        description:
+          "Gemini API key is required for voice agent functionality.",
         variant: "destructive",
       });
       return;
@@ -131,17 +150,19 @@ export default function CampaignCreate() {
     resetTranscript();
 
     // Initial AI message with user's name from campaign title
-    const userName = campaignTitle.split(' ')[0];
+    const userName = campaignTitle.split(" ")[0];
     const initialMessage = {
       role: "assistant",
-      content: `Hello, am I speaking with ${userName}?`
+      content: `Hello, am I speaking with Shiva?`,
     };
     setConversationHistory([initialMessage]);
 
     // Speak the initial message with Indian voice
     const utterance = new SpeechSynthesisUtterance(initialMessage.content);
     const voices = window.speechSynthesis.getVoices();
-    const indianVoice = voices.find(voice => voice.name.toLowerCase().includes('hindi'));
+    const indianVoice = voices.find((voice) =>
+      voice.name.toLowerCase().includes("hindi"),
+    );
     if (indianVoice) {
       utterance.voice = indianVoice;
     }
@@ -150,9 +171,9 @@ export default function CampaignCreate() {
     // We'll request microphone access only when needed (when user starts speaking)
     utterance.onend = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ 
+        const stream = await navigator.mediaDevices.getUserMedia({
           audio: true,
-          video: false
+          video: false,
         });
 
         // Test the audio stream
@@ -169,10 +190,13 @@ export default function CampaignCreate() {
           description: "Your microphone is working and ready for the call.",
         });
       } catch (error) {
-        console.error('Microphone error:', error);
+        console.error("Microphone error:", error);
         toast({
           title: "Microphone Error",
-          description: error instanceof Error ? error.message : "Failed to access microphone. Please check your settings.",
+          description:
+            error instanceof Error
+              ? error.message
+              : "Failed to access microphone. Please check your settings.",
           variant: "destructive",
         });
       }
@@ -195,8 +219,10 @@ export default function CampaignCreate() {
 
     // Set voice based on selection
     const voices = synth.getVoices();
-    const selectedVoiceObj = voices.find(voice => 
-      voice.name.toLowerCase().includes(selectedVoice === "indian-male" ? "hindi" : "en-us")
+    const selectedVoiceObj = voices.find((voice) =>
+      voice.name
+        .toLowerCase()
+        .includes(selectedVoice === "indian-male" ? "hindi" : "en-us"),
     );
 
     if (selectedVoiceObj) {
@@ -221,12 +247,12 @@ export default function CampaignCreate() {
 
   useEffect(() => {
     if (!browserSupportsSpeechRecognition) {
-      console.error('Speech recognition is not supported');
+      console.error("Speech recognition is not supported");
       return;
     }
 
     let recognitionTimeout: NodeJS.Timeout;
-    
+
     if (isCallActive && transcript && !isProcessing) {
       // Only process after a brief pause in speaking
       recognitionTimeout = setTimeout(() => {
@@ -251,7 +277,7 @@ export default function CampaignCreate() {
 
   useEffect(() => {
     if (isCallActive) {
-      SpeechRecognition.startListening({ continuous: true, language: 'en-US' });
+      SpeechRecognition.startListening({ continuous: true, language: "en-US" });
     }
     return () => {
       if (isCallActive) {
@@ -262,14 +288,14 @@ export default function CampaignCreate() {
 
   const handleSendMessage = async (messageContent?: string) => {
     const content = messageContent || userInput;
-    if ((!content.trim()) || isProcessing) return;
+    if (!content.trim() || isProcessing) return;
 
     let timeoutId: NodeJS.Timeout;
     const TIMEOUT_DURATION = 15000; // 15 seconds timeout for better stability
 
     // Add user message to conversation immediately
     const userMessage = { role: "user", content: content.trim() };
-    setConversationHistory(prev => [...prev, userMessage]);
+    setConversationHistory((prev) => [...prev, userMessage]);
     setIsProcessing(true);
     resetTranscript();
     setUserInput("");
@@ -277,7 +303,10 @@ export default function CampaignCreate() {
     try {
       // Set up timeout for the API call
       const timeoutPromise = new Promise((_, reject) => {
-        timeoutId = setTimeout(() => reject(new Error('Request timeout')), TIMEOUT_DURATION);
+        timeoutId = setTimeout(
+          () => reject(new Error("Request timeout")),
+          TIMEOUT_DURATION,
+        );
       });
 
       if (!chat.current) {
@@ -288,28 +317,28 @@ export default function CampaignCreate() {
       // Race between the API call and timeout
       const result = await Promise.race([
         chat.current.sendMessage(content.trim()),
-        timeoutPromise
+        timeoutPromise,
       ]);
 
       clearTimeout(timeoutId);
       const aiResponse = await result.response.text();
 
-      if (!aiResponse) throw new Error('Empty response received');
+      if (!aiResponse) throw new Error("Empty response received");
 
       // Add AI response to conversation
       const assistantMessage = { role: "assistant", content: aiResponse };
-      setConversationHistory(prev => [...prev, assistantMessage]);
-      
+      setConversationHistory((prev) => [...prev, assistantMessage]);
+
       // Speak the AI response
       speakText(aiResponse);
-      
     } catch (error) {
       console.error("AI Response Error:", error);
       toast({
         title: "AI Response Error",
-        description: error instanceof Error && error.message === 'Request timeout' 
-          ? "Response took too long. Please try again." 
-          : "Failed to get a response. Please try again.",
+        description:
+          error instanceof Error && error.message === "Request timeout"
+            ? "Response took too long. Please try again."
+            : "Failed to get a response. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -348,19 +377,27 @@ export default function CampaignCreate() {
                 autoFocus
                 onBlur={() => setIsEditingTitle(false)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
+                  if (e.key === "Enter") {
                     setIsEditingTitle(false);
                   }
                 }}
               />
-              <Button variant="ghost" size="icon" onClick={() => setIsEditingTitle(false)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsEditingTitle(false)}
+              >
                 <Check className="h-4 w-4" />
               </Button>
             </div>
           ) : (
             <>
               <h1 className="text-xl font-bold">{campaignTitle}</h1>
-              <Button variant="ghost" size="icon" onClick={() => setIsEditingTitle(true)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsEditingTitle(true)}
+              >
                 <Pencil className="h-4 w-4" />
               </Button>
             </>
@@ -451,12 +488,12 @@ export default function CampaignCreate() {
           </div>
 
           {!isCallActive ? (
-            <TestConversation 
+            <TestConversation
               onStartCall={startCall}
               isCallActive={isCallActive}
             />
           ) : (
-            <div className="flex flex-col flex-1 w-full bg-[#1E1E1E]">
+            <div className="flex flex-col flex-1 w-full">
               {/* Conversation display */}
               <div className="flex-1 p-4 space-y-4">
                 {conversationHistory.map((message, index) => (
@@ -467,11 +504,21 @@ export default function CampaignCreate() {
                     }`}
                   >
                     {message.role === "assistant" && (
-                      <div className="w-8 h-8 rounded-full overflow-hidden bg-zinc-800 flex-shrink-0 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="12" cy="12" r="10"/>
-                          <path d="M12 16v-4"/>
-                          <path d="M12 8h.01"/>
+                      <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M12 16v-4" />
+                          <path d="M12 8h.01" />
                         </svg>
                       </div>
                     )}
@@ -486,8 +533,8 @@ export default function CampaignCreate() {
                     </div>
                     {message.role === "user" && (
                       <div className="w-8 h-8 rounded-full overflow-hidden bg-[#8257E6] flex-shrink-0">
-                        <img 
-                          src="https://ui-avatars.com/api/?name=Shiva+Chintaluru&background=random" 
+                        <img
+                          src="https://ui-avatars.com/api/?name=Shiva+Chintaluru&background=random"
                           alt="User"
                           className="h-full w-full object-cover"
                         />
@@ -495,7 +542,7 @@ export default function CampaignCreate() {
                     )}
                   </div>
                 ))}
-                
+
                 {/* AI Typing Indicator */}
                 {isProcessing && (
                   <div className="mb-4 text-left">
@@ -560,10 +607,14 @@ export default function CampaignCreate() {
         >
           Cancel
         </Button>
-        <Button 
-          onClick={() => setLocation(campaignId ? 
-            `/campaign-audience?id=${campaignId}` : 
-            "/campaign-audience")} 
+        <Button
+          onClick={() =>
+            setLocation(
+              campaignId
+                ? `/campaign-audience?id=${campaignId}`
+                : "/campaign-audience",
+            )
+          }
           className="w-full sm:w-auto"
         >
           Next: {campaignId ? "Update" : "Select"} your audience
