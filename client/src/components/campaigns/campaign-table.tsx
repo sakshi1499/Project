@@ -152,12 +152,7 @@ const CampaignTable = ({ campaigns, isLoading, onEditCampaign }: CampaignTablePr
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => {
-                  toast({
-                    title: "Campaign selected",
-                    description: `Editing campaign: ${campaign.name}`,
-                  });
-                }}
+                onClick={() => onEditCampaign(campaign)}
                 disabled={pendingActions.has(campaign.id)}
               >
                 <Edit className="h-5 w-5" />
