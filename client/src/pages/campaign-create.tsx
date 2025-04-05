@@ -432,10 +432,12 @@ export default function CampaignCreate() {
       </div>
 
       {/* Main content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2 sm:p-4 h-[calc(100vh-12rem)] bg-zinc-200 dark:bg-zinc-800">
-        {/* Left panel - Campaign Instructions */}
-        <div className="flex flex-col h-full">
-          <h2 className="text-lg font-semibold mb-2">Campaign Instructions</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2 sm:p-4 h-[calc(100vh-12rem)]">
+        {/* Left column - Campaign Instructions */}
+        <div className="flex flex-col h-full bg-card rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-lg font-semibold">Campaign Instructions</h2>
+          </div>
 
           <div className="mb-4">
             <Select value={selectedVoice} onValueChange={setSelectedVoice}>
@@ -529,9 +531,11 @@ export default function CampaignCreate() {
           </div>
         </div>
 
-        {/* Right panel - Test the Conversation */}
-        <div className="flex flex-col h-full">
-          <h2 className="text-lg font-semibold mb-2">Test the Conversation</h2>
+        {/* Right column - Test Conversation */}
+        <div className="flex flex-col h-full bg-card rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-lg font-semibold">Test Conversation</h2>
+          </div>
 
           {!isCallActive ? (
             <div className="flex flex-col items-center justify-center flex-1 bg-muted/30 rounded-lg">
