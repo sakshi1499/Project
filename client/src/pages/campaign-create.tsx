@@ -160,32 +160,41 @@ export default function CampaignCreate() {
       return;
     }
 
-    setIsCallActive(true);
-    setConversationHistory([]);
-    resetTranscript();
-    SpeechRecognition.startListening({ continuous: true });
-
-    // Initial AI message with user's name from campaign title
-    const userName = campaignTitle.split(' ')[0];
-    const initialMessage = {
-      role: "assistant",
-      content: `Hello, am I speaking with ${userName}?`
-    };
-    setConversationHistory([initialMessage]);
-
-    // Speak the initial message with Indian voice
-    const utterance = new SpeechSynthesisUtterance(initialMessage.content);
-    const voices = window.speechSynthesis.getVoices();
-    const indianVoice = voices.find(voice => voice.name.toLowerCase().includes('hindi'));
-    if (indianVoice) {
+    try {
+      // Initialize chat first
+      chat.current = await startConversation();
+      await chat.current.sendMessage(campaignInstructions);
+      
+      setIsCallActive(true);
+      setConversationHistory([]);
+      resetTranscript();
+      
+      // Initial AI message
+      const initialMessage = {
+        role: "assistant",
+        content: "Hello, I'm calling from Aparna Sarovar. Am I speaking with you regarding your property inquiry?"
+      };
+      setConversationHistory([initialMessage]);
+      
+      // Speak the initial message
+      const utterance = new SpeechSynthesisUtterance(initialMessage.content);
+      const voices = window.speechSynthesis.getVoices();
+      const indianVoice = voices.find(voice => voice.name.toLowerCase().includes('hindi')) || voices[0];
       utterance.voice = indianVoice;
-    }
-    window.speechSynthesis.speak(utterance);
+      utterance.onend = () => {
+        SpeechRecognition.startListening({ continuous: true });
+      };
+      window.speechSynthesis.speak(utterance);
 
-    // Start listening after initial message
-    setTimeout(() => {
-      SpeechRecognition.startListening({ continuous: true });
-    }, 2000);
+    } catch (error) {
+      console.error('Failed to start call:', error);
+      toast({
+        title: "Start Call Error",
+        description: "Failed to initialize the conversation. Please try again.",
+        variant: "destructive",
+      });
+      setIsCallActive(false);
+    }
   };
 
   const endCall = () => {
