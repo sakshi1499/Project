@@ -10,7 +10,7 @@ interface PageHeaderProps {
 
 const PageHeader = ({ title, showSearch = false }: PageHeaderProps) => {
   return (
-    <header className="px-8 py-6 border-b border-border flex items-center justify-between">
+    <header className="px-8 py-6 border-b border-border flex items-center justify-between sticky top-0 bg-background z-50">
       <h1 className="text-xl font-semibold">{title}</h1>
 
       {/* Header Actions */}
