@@ -550,7 +550,7 @@ export default function CampaignCreate() {
                   End Call
                 </Button>
               </div>
-            </Card>
+            </div>
           )}
         </div>
       </div>
