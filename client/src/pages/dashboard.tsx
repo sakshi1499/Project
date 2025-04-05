@@ -149,7 +149,7 @@ const Dashboard = () => {
             <CardTitle>Leads per Month</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-[250px]">
+            <div className="h-[180px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={monthlyLeadsData}>
                   <XAxis dataKey="name" tickLine={false} axisLine={false} />
@@ -158,14 +158,14 @@ const Dashboard = () => {
                     axisLine={false} 
                     tickFormatter={(value) => `${value}`} 
                     domain={[0, 3000]}
-                    ticks={[0, 1000, 2000, 3000]}
+                    ticks={[0, 1500, 3000]}
                   />
                   <Tooltip cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }} />
                   <Bar 
                     dataKey="leads" 
                     fill="#a3a0fb" 
                     radius={[4, 4, 0, 0]}
-                    barSize={50}
+                    barSize={35}
                     fillOpacity={0.9}
                   />
                 </BarChart>
@@ -207,31 +207,10 @@ const Dashboard = () => {
                   style={{ width: `${campaignStatusData.pending}%` }} 
                 />
               </div>
-              <div className="grid grid-cols-3 md:grid-cols-6 text-xs">
-                <div className="flex items-center">
-                  <div className="w-3 h-3 mr-1 bg-green-600 rounded-sm"></div>
-                  <span>Hot Leads</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 mr-1 bg-green-200 rounded-sm"></div>
-                  <span>Interested</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 mr-1 bg-red-300 rounded-sm"></div>
-                  <span>Not Connected</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 mr-1 bg-red-500 rounded-sm"></div>
-                  <span>Not Interested</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 mr-1 bg-orange-400 rounded-sm"></div>
-                  <span>Follow up</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 mr-1 bg-gray-300 rounded-sm"></div>
-                  <span>Pending</span>
-                </div>
+              <div className="flex justify-between px-4 text-xs text-muted-foreground mt-4">
+                <span>Hot Leads ({campaignStatusData.hotLeads}%)</span>
+                <span>Interested ({campaignStatusData.interested}%)</span>
+                <span>Not Connected ({campaignStatusData.notConnected}%)</span>
               </div>
             </div>
           </CardContent>
