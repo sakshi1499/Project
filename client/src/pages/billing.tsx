@@ -79,9 +79,25 @@ const Billing = () => {
                 </div>
               </div>
             </CardContent>
+            <CardContent className="space-y-4 mt-4 border-t pt-4">
+              <div className="space-y-2">
+                <label htmlFor="cardNumber" className="text-sm font-medium">Card Number</label>
+                <Input id="cardNumber" placeholder="4242 4242 4242 4242" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label htmlFor="expiry" className="text-sm font-medium">Expiry Date</label>
+                  <Input id="expiry" placeholder="MM/YY" />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="cvc" className="text-sm font-medium">CVC</label>
+                  <Input id="cvc" placeholder="123" />
+                </div>
+              </div>
+            </CardContent>
             <CardFooter>
               <Button type="submit" className="w-full">
-                Update Payment Method
+                Save Payment Method
               </Button>
             </CardFooter>
           </Card>
