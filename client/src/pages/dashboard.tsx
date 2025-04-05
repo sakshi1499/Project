@@ -3,7 +3,7 @@ import PageHeader from "@/components/layout/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, LineChart, Line, PieChart, Pie, Cell } from "recharts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Phone, UserCheck, UserClock, TrendingUp } from "lucide-react";
+import { Phone, UserCheck, Clock, TrendingUp } from "lucide-react";
 
 const monthlyLeadsData = [
   { name: "Jan", leads: 45 },
@@ -72,7 +72,7 @@ const Dashboard = () => {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div className="text-2xl font-bold">124</div>
-                <UserClock className="h-5 w-5 text-muted-foreground" />
+                <Clock className="h-5 w-5 text-muted-foreground" />
               </div>
             </CardContent>
           </Card>
