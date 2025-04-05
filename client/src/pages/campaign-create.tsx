@@ -51,10 +51,18 @@ export default function CampaignCreate() {
   const campaignId = searchParams.get("id")
     ? parseInt(searchParams.get("id") as string)
     : undefined;
-  const [selectedVoice, setSelectedVoice] = useState<string>(campaignData?.voiceType || "indian-male");
+  const [selectedVoice, setSelectedVoice] = useState<string>("indian-male");
   const [isProcessing, setIsProcessing] = useState(false);
   const [campaignTitle, setCampaignTitle] = useState("Construction Campaign");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
+
+  // Update state with campaign data when loaded
+  useEffect(() => {
+    if (campaignData) {
+      setCampaignTitle(campaignData.name || "Construction Campaign");
+      setSelectedVoice(campaignData.voiceType || "indian-male");
+    }
+  }, [campaignData]);
   const [campaignInstructions, setCampaignInstructions] = useState(
     "Objective: AI sales representative for Aparna Sarovar luxury apartments. Focus on securing site visits.\n\n" +
       "Guidelines:\n" +
