@@ -330,8 +330,16 @@ export default function CampaignCreate() {
       const assistantMessage = { role: "assistant", content: aiResponse };
       setConversationHistory((prev) => [...prev, assistantMessage]);
 
-      // Speak the AI response
+      // Speak the AI response and wait for it to finish before listening again
       speakText(aiResponse);
+
+      // Don't start listening until AI has finished speaking
+      utterance.onend = () => {
+        if (isCallActive) {
+          resetTranscript();
+          SpeechRecognition.startListening({ continuous: true });
+        }
+      };
     } catch (error) {
       console.error("AI Response Error:", error);
       toast({
