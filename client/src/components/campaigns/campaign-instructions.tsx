@@ -22,7 +22,7 @@ const CampaignInstructions: React.FC<CampaignInstructionsProps> = ({
   setCampaignInstructions,
 }) => {
   return (
-    <div className="flex flex-col h-full bg-zinc-200 dark:bg-zinc-800 rounded-lg p-4">
+    <div className="flex flex-col h-full min-h-0 bg-zinc-200 dark:bg-zinc-800 rounded-lg p-4">
       <div className="flex items-center gap-2 mb-4">
         <h2 className="text-lg font-semibold">Campaign Instructions</h2>
       </div>

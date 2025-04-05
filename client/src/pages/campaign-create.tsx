@@ -510,11 +510,11 @@ export default function CampaignCreate() {
       </div>
 
       {/* Footer */}
-      <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between p-2 sm:p-4 border-t">
+      <div className="sticky bottom-0 bg-background flex flex-col sm:flex-row gap-2 sm:gap-4 justify-between p-4 border-t">
         <Button
           variant="outline"
           onClick={() => setLocation("/campaigns")}
-          className="w-full sm:w-auto"
+          className="w-full sm:w-32"
         >
           Cancel
         </Button>
