@@ -454,6 +454,28 @@ export default function CampaignCreate() {
                     </div>
                   </div>
                 ))}
+                
+                {/* AI Typing Indicator */}
+                {isProcessing && (
+                  <div className="mb-4 text-left">
+                    <div className="inline-block rounded-lg px-4 py-2 max-w-[80%] bg-muted">
+                      <div className="flex gap-1">
+                        <div className="w-2 h-2 rounded-full bg-foreground/50 animate-bounce" />
+                        <div className="w-2 h-2 rounded-full bg-foreground/50 animate-bounce [animation-delay:0.2s]" />
+                        <div className="w-2 h-2 rounded-full bg-foreground/50 animate-bounce [animation-delay:0.4s]" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* User Speaking Indicator */}
+                {listening && !isProcessing && transcript && (
+                  <div className="mb-4 text-right">
+                    <div className="inline-block rounded-lg px-4 py-2 max-w-[80%] bg-primary text-primary-foreground">
+                      {transcript}
+                    </div>
+                  </div>
+                )}
                 <div ref={messagesEndRef} />
               </div>
 
