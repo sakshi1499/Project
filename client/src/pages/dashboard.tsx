@@ -62,7 +62,7 @@ const Dashboard = () => {
   return (
     <div className="pb-8">
       <PageHeader title="Dashboard" />
-      
+
       <div className="p-4 md:p-8">
         <div className="flex justify-end gap-2 mb-6">
           <Select defaultValue="lastWeek">
@@ -75,7 +75,7 @@ const Dashboard = () => {
               <SelectItem value="lastYear">Last Year</SelectItem>
             </SelectContent>
           </Select>
-          
+
           <Select defaultValue="construction">
             <SelectTrigger className="w-[200px] bg-card border-muted">
               <SelectValue placeholder="Campaign" />
@@ -90,7 +90,7 @@ const Dashboard = () => {
 
         {/* Key Metrics */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <Card className="bg-card border-none shadow-sm h-[120px]">
+          <Card className="bg-zinc-900 border-none shadow-sm h-[120px]">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Calls
@@ -102,8 +102,8 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
-          
-          <Card className="bg-card border-none shadow-sm">
+
+          <Card className="bg-zinc-900 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Conversion Rate
@@ -116,7 +116,7 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-card border-none shadow-sm">
+          <Card className="bg-zinc-900 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Leads
@@ -128,8 +128,8 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
-          
-          <Card className="bg-card border-none shadow-sm">
+
+          <Card className="bg-zinc-900 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Follow Up
@@ -142,10 +142,10 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {/* Monthly Leads Chart */}
-          <Card className="bg-card border-none shadow-sm h-[300px]">
+          <Card className="bg-zinc-900 border-none shadow-sm h-[300px]">
             <CardHeader className="pb-2">
               <CardTitle>Leads per Month</CardTitle>
             </CardHeader>
@@ -174,9 +174,9 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
-          
+
           {/* Campaign Overview */}
-          <Card className="bg-card border-none shadow-sm h-[300px]">
+          <Card className="bg-zinc-900 border-none shadow-sm h-[300px]">
             <CardHeader className="pb-2">
               <CardTitle>Campaign Overview</CardTitle>
             </CardHeader>
@@ -206,10 +206,10 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Frequent Responses */}
-          <Card className="bg-card border-none shadow-sm h-[300px]">
+          <Card className="bg-zinc-900 border-none shadow-sm h-[300px]">
             <CardHeader className="pb-2">
               <CardTitle>Frequent responses from Customers</CardTitle>
             </CardHeader>
@@ -228,9 +228,9 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
-          
+
           {/* Script Analysis */}
-          <Card className="bg-card border-none shadow-sm">
+          <Card className="bg-zinc-900 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle>Script Analysis</CardTitle>
             </CardHeader>
