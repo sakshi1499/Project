@@ -316,22 +316,34 @@ export default function CampaignCreate() {
       }
 
       // Race between the API call and timeout
-      const result = await Promise.race([
+      const stream = await Promise.race([
         chat.current.sendMessage(content.trim()),
         timeoutPromise,
       ]);
 
       clearTimeout(timeoutId);
-      const aiResponse = await result.response.text();
-
-      if (!aiResponse) throw new Error("Empty response received");
-
-      // Add AI response to conversation
-      const assistantMessage = { role: "assistant", content: aiResponse };
-      setConversationHistory((prev) => [...prev, assistantMessage]);
-
-      // Speak the AI response and wait for it to finish before listening again
-      speakText(aiResponse);
+      let fullResponse = '';
+      
+      for await (const chunk of stream) {
+        const textChunk = chunk.text();
+        fullResponse += textChunk;
+        
+        // Update conversation in real-time
+        setConversationHistory((prev) => {
+          const newHistory = [...prev];
+          if (newHistory[newHistory.length - 1]?.role === 'assistant') {
+            newHistory[newHistory.length - 1].content = fullResponse;
+          } else {
+            newHistory.push({ role: 'assistant', content: fullResponse });
+          }
+          return newHistory;
+        });
+        
+        // Speak each chunk as it arrives
+        if (textChunk.trim()) {
+          speakText(textChunk);
+        }
+      }
 
       // Don't start listening until AI has finished speaking
       utterance.onend = () => {
