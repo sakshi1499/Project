@@ -7,6 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -80,26 +89,40 @@ const Billing = () => {
                 </div>
               </div>
             </CardContent>
-            <CardContent className="space-y-4 mt-4 border-t pt-4">
-              <div className="space-y-2">
-                <label htmlFor="cardNumber" className="text-sm font-medium">Card Number</label>
-                <Input id="cardNumber" placeholder="4242 4242 4242 4242" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label htmlFor="expiry" className="text-sm font-medium">Expiry Date</label>
-                  <Input id="expiry" placeholder="MM/YY" />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="cvc" className="text-sm font-medium">CVC</label>
-                  <Input id="cvc" placeholder="123" />
-                </div>
-              </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit" className="w-full">
-                Save Payment Method
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="w-full">Update Payment Method</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Update Payment Method</DialogTitle>
+                    <DialogDescription>
+                      Enter your card details to update your payment method.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <div className="space-y-2">
+                      <label htmlFor="cardNumber" className="text-sm font-medium">Card Number</label>
+                      <Input id="cardNumber" placeholder="4242 4242 4242 4242" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label htmlFor="expiry" className="text-sm font-medium">Expiry Date</label>
+                        <Input id="expiry" placeholder="MM/YY" />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="cvc" className="text-sm font-medium">CVC</label>
+                        <Input id="cvc" placeholder="123" />
+                      </div>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit" className="w-full">Save Payment Method</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </CardFooter>
           </Card>
         </div>
