@@ -112,7 +112,7 @@ const CampaignInstructions: React.FC<CampaignInstructionsProps> = ({
 
       <div className="rounded-md border border-input flex-1">
         <Textarea
-          className="w-full h-[500px] font-mono text-sm resize-none border-none rounded-none"
+          className="w-full h-[450px] font-mono text-sm resize-none border-none rounded-none"
           value={campaignInstructions}
           onChange={(e) => setCampaignInstructions(e.target.value)}
         />
