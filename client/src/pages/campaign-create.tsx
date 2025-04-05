@@ -487,7 +487,7 @@ export default function CampaignCreate() {
                     <div
                       className={`rounded-lg px-4 py-2 max-w-[80%] ${
                         message.role === "assistant"
-                          ? "bg-zinc-800 text-white"
+                          ? "bg-zinc-80 text-white"
                           : "bg-[#8257E6] text-white"
                       }`}
                     >
