@@ -117,15 +117,6 @@ export default function CampaignCreate() {
       return;
     }
 
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      toast({
-        title: "Microphone Error",
-        description: "Microphone access is not available in your browser.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     try {
       // Request microphone access
       const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -169,48 +160,32 @@ export default function CampaignCreate() {
       return;
     }
 
-    try {
-      if (!import.meta.env.VITE_GEMINI_API_KEY) {
-        throw new Error('Gemini API key is not configured');
-      }
-      
-      // Initialize chat first
-      chat.current = await startConversation();
-      if (!chat.current) {
-        throw new Error('Failed to initialize chat');
-      }
-      
-      await chat.current.sendMessage(campaignInstructions);
-      setIsCallActive(true);
-      setConversationHistory([]);
-      resetTranscript();
-      
-      // Initial AI message
-      const initialMessage = {
-        role: "assistant",
-        content: "Hello, I'm calling from Aparna Sarovar. Am I speaking with you regarding your property inquiry?"
-      };
-      setConversationHistory([initialMessage]);
-      
-      // Speak the initial message
-      const utterance = new SpeechSynthesisUtterance(initialMessage.content);
-      const voices = window.speechSynthesis.getVoices();
-      const indianVoice = voices.find(voice => voice.name.toLowerCase().includes('hindi')) || voices[0];
-      utterance.voice = indianVoice;
-      utterance.onend = () => {
-        SpeechRecognition.startListening({ continuous: true });
-      };
-      window.speechSynthesis.speak(utterance);
+    setIsCallActive(true);
+    setConversationHistory([]);
+    resetTranscript();
+    SpeechRecognition.startListening({ continuous: true });
 
-    } catch (error) {
-      console.error('Failed to start call:', error);
-      toast({
-        title: "Start Call Error",
-        description: "Failed to initialize the conversation. Please try again.",
-        variant: "destructive",
-      });
-      setIsCallActive(false);
+    // Initial AI message with user's name from campaign title
+    const userName = campaignTitle.split(' ')[0];
+    const initialMessage = {
+      role: "assistant",
+      content: `Hello, am I speaking with ${userName}?`
+    };
+    setConversationHistory([initialMessage]);
+
+    // Speak the initial message with Indian voice
+    const utterance = new SpeechSynthesisUtterance(initialMessage.content);
+    const voices = window.speechSynthesis.getVoices();
+    const indianVoice = voices.find(voice => voice.name.toLowerCase().includes('hindi'));
+    if (indianVoice) {
+      utterance.voice = indianVoice;
     }
+    window.speechSynthesis.speak(utterance);
+
+    // Start listening after initial message
+    setTimeout(() => {
+      SpeechRecognition.startListening({ continuous: true });
+    }, 2000);
   };
 
   const endCall = () => {
@@ -502,9 +477,7 @@ export default function CampaignCreate() {
                   >
                     {message.role === "assistant" && (
                       <div className="w-8 h-8 rounded-full overflow-hidden bg-zinc-800 flex-shrink-0">
-                        <img src="/assistant-avatar.png" alt="AI Agent" className="w-full h-full object-cover" onError={(e) => {
-                          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 16v-4'/%3E%3Cpath d='M12 8h.01'/%3E%3C/svg%3E";
-                        }} />
+                        <img src="/agent-avatar.png" alt="AI Agent" className="w-full h-full object-cover" />
                       </div>
                     )}
                     <div
@@ -517,12 +490,11 @@ export default function CampaignCreate() {
                       {message.content}
                     </div>
                     {message.role === "user" && (
-                      <div className="w-8 h-8 rounded-full overflow-hidden bg-[#8257E6] flex-shrink-0">
-                        <img 
-                          src={auth?.currentUser?.photoURL || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E"} 
-                          alt="User" 
-                          className="w-full h-full object-cover"
-                        />
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-[#8257E6] flex-shrink-0 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                          <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
                       </div>
                     )}
                   </div>
