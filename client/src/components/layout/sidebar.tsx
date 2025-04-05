@@ -129,7 +129,7 @@ const Sidebar = () => {
             Dashboard
           </NavItem>
 
-          <NavItem href="/campaigns" icon={Mic} badge={9}>
+          <NavItem href="/campaign-create" icon={Mic} badge={9}>
             Voice Campaigns
           </NavItem>
 
