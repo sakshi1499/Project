@@ -22,10 +22,10 @@ const CampaignInstructions: React.FC<CampaignInstructionsProps> = ({
   setCampaignInstructions,
 }) => {
   React.useEffect(() => {
-    if (!selectedVoice) {
+    if (!selectedVoice || selectedVoice === "") {
       setSelectedVoice("indian-male");
     }
-  }, []);
+  }, [selectedVoice, setSelectedVoice]);
 
   return (
     <div className="flex flex-col h-full min-h-0 bg-zinc-200 dark:bg-zinc-800 rounded-lg p-4">
