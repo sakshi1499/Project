@@ -117,40 +117,6 @@ export default function CampaignCreate() {
       return;
     }
 
-    try {
-      // Request microphone access
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: true,
-        video: false
-      });
-
-      // Start speech recognition
-      SpeechRecognition.startListening({ continuous: true });
-
-      if (!stream) {
-        throw new Error('No audio stream available');
-      }
-
-      // Test the audio stream
-      const audioContext = new AudioContext();
-      const source = audioContext.createMediaStreamSource(stream);
-      const analyser = audioContext.createAnalyser();
-      source.connect(analyser);
-
-      toast({
-        title: "Microphone Connected",
-        description: "Your microphone is working and ready for the call.",
-      });
-    } catch (error) {
-      console.error('Microphone error:', error);
-      toast({
-        title: "Microphone Error",
-        description: error instanceof Error ? error.message : "Failed to access microphone. Please check your settings.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     if (!isGeminiConfigured()) {
       toast({
         title: "API Key Required",
@@ -163,7 +129,6 @@ export default function CampaignCreate() {
     setIsCallActive(true);
     setConversationHistory([]);
     resetTranscript();
-    SpeechRecognition.startListening({ continuous: true });
 
     // Initial AI message with user's name from campaign title
     const userName = campaignTitle.split(' ')[0];
@@ -182,10 +147,36 @@ export default function CampaignCreate() {
     }
     window.speechSynthesis.speak(utterance);
 
-    // Start listening after initial message
-    setTimeout(() => {
-      SpeechRecognition.startListening({ continuous: true });
-    }, 2000);
+    // We'll request microphone access only when needed (when user starts speaking)
+    utterance.onend = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          audio: true,
+          video: false
+        });
+
+        // Test the audio stream
+        const audioContext = new AudioContext();
+        const source = audioContext.createMediaStreamSource(stream);
+        const analyser = audioContext.createAnalyser();
+        source.connect(analyser);
+
+        // Start speech recognition
+        SpeechRecognition.startListening({ continuous: true });
+
+        toast({
+          title: "Microphone Connected",
+          description: "Your microphone is working and ready for the call.",
+        });
+      } catch (error) {
+        console.error('Microphone error:', error);
+        toast({
+          title: "Microphone Error",
+          description: error instanceof Error ? error.message : "Failed to access microphone. Please check your settings.",
+          variant: "destructive",
+        });
+      }
+    };
   };
 
   const endCall = () => {
