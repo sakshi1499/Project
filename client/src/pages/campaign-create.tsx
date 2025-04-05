@@ -23,9 +23,9 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 
 import { startConversation } from '@/lib/gemini';
 
-// Check if the OpenAI API key is available
-const isOpenAIConfigured = () => {
-  return import.meta.env.VITE_OPENAI_API_KEY !== undefined;
+// Check if the Gemini API key is available
+const isGeminiConfigured = () => {
+  return import.meta.env.VITE_GEMINI_API_KEY !== undefined;
 };
 
 export default function CampaignCreate() {
@@ -151,10 +151,10 @@ export default function CampaignCreate() {
       return;
     }
 
-    if (!isOpenAIConfigured()) {
+    if (!isGeminiConfigured()) {
       toast({
         title: "API Key Required",
-        description: "OpenAI API key is required for voice agent functionality.",
+        description: "Gemini API key is required for voice agent functionality.",
         variant: "destructive",
       });
       return;
