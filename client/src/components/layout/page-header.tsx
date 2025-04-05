@@ -1,6 +1,7 @@
 import { Search, Bell } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface PageHeaderProps {
   title: string;
@@ -11,7 +12,7 @@ const PageHeader = ({ title, showSearch = false }: PageHeaderProps) => {
   return (
     <header className="px-8 py-6 border-b border-border flex items-center justify-between">
       <h1 className="text-xl font-semibold">{title}</h1>
-      
+
       {/* Header Actions */}
       <div className="flex items-center space-x-4">
         {showSearch && (
@@ -24,7 +25,7 @@ const PageHeader = ({ title, showSearch = false }: PageHeaderProps) => {
             <Search className="h-4 w-4 absolute right-3 top-2.5 text-muted-foreground" />
           </div>
         )}
-        
+
         <ThemeToggle />
         <Button variant="ghost" size="icon" className="rounded-full">
           <Bell className="h-5 w-5" />
