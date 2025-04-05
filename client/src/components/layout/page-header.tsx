@@ -27,9 +27,6 @@ const PageHeader = ({ title, showSearch = false }: PageHeaderProps) => {
         )}
 
         <ThemeToggle />
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <Bell className="h-5 w-5" />
-        </Button>
       </div>
     </header>
   );
