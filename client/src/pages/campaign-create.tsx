@@ -51,7 +51,7 @@ export default function CampaignCreate() {
   const campaignId = searchParams.get("id")
     ? parseInt(searchParams.get("id") as string)
     : undefined;
-  const [selectedVoice, setSelectedVoice] = useState<string>("indian-male");
+  const [selectedVoice, setSelectedVoice] = useState<string>(campaignData?.voiceType || "indian-male");
   const [isProcessing, setIsProcessing] = useState(false);
   const [campaignTitle, setCampaignTitle] = useState("Construction Campaign");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -106,7 +106,7 @@ export default function CampaignCreate() {
       setCampaignInstructions(campaignData.script || "");
       setSelectedVoice(campaignData.voiceType || "indian-male");
     }
-  }, [campaignData]);
+  }, [campaignData, setSelectedVoice]);
 
   // Auto-send message when user stops speaking
   useEffect(() => {
