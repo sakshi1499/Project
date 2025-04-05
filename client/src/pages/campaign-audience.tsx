@@ -80,11 +80,11 @@ export default function CampaignAudience() {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   // Extract campaign ID from URL if provided for editing
   const searchParams = new URLSearchParams(window.location.search);
   const campaignId = searchParams.get('id') ? parseInt(searchParams.get('id') as string) : undefined;
-  
+
   // Load campaign data if editing an existing campaign
   const { data: campaignData } = useQuery<Campaign>({
     queryKey: ['/api/campaigns', campaignId],
@@ -96,62 +96,62 @@ export default function CampaignAudience() {
     },
     enabled: !!campaignId
   });
-  
+
   // Update state with campaign data when loaded
   useEffect(() => {
     if (campaignData) {
       setCampaignTitle(campaignData.name || "Construction Campaign");
     }
   }, [campaignData]);
-  
+
   const [selectedContacts, setSelectedContacts] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [contacts, setContacts] = useState(campaignId ? mockContacts : []);
-  
+
   // Handle file upload trigger
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
-  
+
   // Handle file upload
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    
+
     // This is a mock implementation. In a real app, we'd parse the Excel file
     // For now, we'll just show a success message
     toast({
       title: "File uploaded successfully",
       description: `File "${file.name}" has been processed. 8 new contacts imported.`,
     });
-    
+
     // Reset file input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
-  
+
   // Handle contact deletion
   const handleDeleteSelected = () => {
     if (selectedContacts.length === 0) return;
-    
+
     const newContacts = contacts.filter(contact => !selectedContacts.includes(contact.id));
     setContacts(newContacts);
     setSelectedContacts([]);
-    
+
     toast({
       title: `${selectedContacts.length} contacts deleted`,
       description: "The selected contacts have been removed from your audience.",
     });
   };
-  
+
   // Filter contacts based on search query
   const filteredContacts = contacts.filter(contact => 
     contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     contact.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
     contact.phone.includes(searchQuery)
   );
-  
+
   // Handle contact selection
   const toggleContactSelection = (contactId: number) => {
     setSelectedContacts(prev => 
@@ -160,7 +160,7 @@ export default function CampaignAudience() {
         : [...prev, contactId]
     );
   };
-  
+
   // Handle select all
   const toggleSelectAll = () => {
     if (selectedContacts.length === filteredContacts.length) {
@@ -169,10 +169,10 @@ export default function CampaignAudience() {
       setSelectedContacts(filteredContacts.map(contact => contact.id));
     }
   };
-  
+
   // Count selected contacts
   const selectedCount = selectedContacts.length;
-  
+
   // Contact form schema
   const contactFormSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -196,13 +196,13 @@ export default function CampaignAudience() {
 
   // Handle manual contact adding
   const [isAddingContact, setIsAddingContact] = useState(false);
-  
+
   const onSubmitContact = (data: ContactFormValues) => {
     // Generate a unique ID
     const newId = contacts.length > 0 
       ? Math.max(...contacts.map(contact => contact.id)) + 1 
       : 1;
-    
+
     // Add the new contact
     const newContact = {
       id: newId,
@@ -211,19 +211,19 @@ export default function CampaignAudience() {
       email: data.email,
       status: "Contact", // Default status
     };
-    
+
     setContacts([...contacts, newContact]);
-    
+
     // Reset form and close dialog
     form.reset();
     setIsAddingContact(false);
-    
+
     toast({
       title: "Contact added",
       description: `${data.name} has been added to your audience.`,
     });
   };
-  
+
   return (
     <div className="flex flex-col h-full">
       {/* Header bar */}
@@ -236,7 +236,7 @@ export default function CampaignAudience() {
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
-          
+
           {isEditingTitle ? (
             <div className="flex items-center gap-1">
               <Input
@@ -324,7 +324,7 @@ export default function CampaignAudience() {
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
               <circle cx="12" cy="12" r="3" />
             </svg>
             <span className="whitespace-nowrap">Configure & Launch</span>
@@ -335,21 +335,21 @@ export default function CampaignAudience() {
       {/* Main content */}
       <div className="flex-1 p-4 overflow-y-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-          <Card>
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-2xl font-bold">{selectedCount}</CardTitle>
               <CardDescription>Contacts Selected</CardDescription>
             </CardHeader>
           </Card>
-          
-          <Card>
+
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-2xl font-bold">{contacts.length}</CardTitle>
               <CardDescription>Total Contacts</CardDescription>
             </CardHeader>
           </Card>
-          
-          <Card>
+
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-2xl font-bold">
                 {Math.round((selectedCount / contacts.length) * 100) || 0}%
@@ -358,7 +358,7 @@ export default function CampaignAudience() {
             </CardHeader>
           </Card>
         </div>
-        
+
         <div className="mb-4">
           <div className="flex flex-col md:flex-row gap-3 items-start md:items-center">
             <div className="relative flex-1">
@@ -384,7 +384,7 @@ export default function CampaignAudience() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            
+
             {/* Hidden file input */}
             <input 
               type="file" 
@@ -393,7 +393,7 @@ export default function CampaignAudience() {
               className="hidden"
               onChange={handleFileUpload}
             />
-            
+
             <div className="flex w-full md:w-auto gap-2 flex-wrap">
               {/* Upload button */}
               <Button 
@@ -404,7 +404,7 @@ export default function CampaignAudience() {
                 <Upload className="h-4 w-4 mr-1" />
                 Import Excel
               </Button>
-              
+
               {/* Add Contact button */}
               <Dialog open={isAddingContact} onOpenChange={setIsAddingContact}>
                 <DialogTrigger asChild>
@@ -423,7 +423,7 @@ export default function CampaignAudience() {
                       Add a new contact to your campaign. All fields are required.
                     </DialogDescription>
                   </DialogHeader>
-                  
+
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmitContact)} className="space-y-4 py-2">
                       <FormField
@@ -439,7 +439,7 @@ export default function CampaignAudience() {
                           </FormItem>
                         )}
                       />
-                      
+
                       <FormField
                         control={form.control}
                         name="phone"
@@ -456,7 +456,7 @@ export default function CampaignAudience() {
                           </FormItem>
                         )}
                       />
-                      
+
                       <FormField
                         control={form.control}
                         name="email"
@@ -470,7 +470,7 @@ export default function CampaignAudience() {
                           </FormItem>
                         )}
                       />
-                      
+
                       <DialogFooter>
                         <Button type="submit">Add Contact</Button>
                       </DialogFooter>
@@ -478,7 +478,7 @@ export default function CampaignAudience() {
                   </Form>
                 </DialogContent>
               </Dialog>
-              
+
               {/* Delete button */}
               <Button 
                 variant="outline" 
@@ -492,7 +492,7 @@ export default function CampaignAudience() {
             </div>
           </div>
         </div>
-        
+
         <div className="rounded-md border overflow-hidden">
           <div className="max-h-[550px] overflow-y-auto">
             <Table>
@@ -541,7 +541,7 @@ export default function CampaignAudience() {
           </div>
         </div>
       </div>
-      
+
       {/* Footer */}
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between p-4 border-t">
         <Button

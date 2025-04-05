@@ -160,7 +160,7 @@ const Settings = () => {
           </TabsContent>
           
           <TabsContent value="account">
-            <Card>
+            <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
               <CardHeader>
                 <CardTitle>Change Password</CardTitle>
                 <CardDescription>
@@ -217,7 +217,7 @@ const Settings = () => {
           </TabsContent>
           
           <TabsContent value="notifications">
-            <Card>
+            <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
               <CardHeader>
                 <CardTitle>Notification Settings</CardTitle>
                 <CardDescription>
