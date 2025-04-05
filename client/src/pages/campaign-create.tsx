@@ -170,10 +170,17 @@ export default function CampaignCreate() {
     }
 
     try {
+      if (!import.meta.env.VITE_GEMINI_API_KEY) {
+        throw new Error('Gemini API key is not configured');
+      }
+      
       // Initialize chat first
       chat.current = await startConversation();
-      await chat.current.sendMessage(campaignInstructions);
+      if (!chat.current) {
+        throw new Error('Failed to initialize chat');
+      }
       
+      await chat.current.sendMessage(campaignInstructions);
       setIsCallActive(true);
       setConversationHistory([]);
       resetTranscript();
