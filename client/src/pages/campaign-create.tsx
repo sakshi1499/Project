@@ -504,22 +504,12 @@ export default function CampaignCreate() {
                     }`}
                   >
                     {message.role === "assistant" && (
-                      <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <path d="M12 16v-4" />
-                          <path d="M12 8h.01" />
-                        </svg>
+                      <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                        <img
+                          src="/ai-avatar.png"
+                          alt="AI Assistant"
+                          className="h-full w-full object-cover"
+                        />
                       </div>
                     )}
                     <div
