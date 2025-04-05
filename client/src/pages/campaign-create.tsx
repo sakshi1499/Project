@@ -433,7 +433,7 @@ export default function CampaignCreate() {
       </div>
 
       {/* Main content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2 sm:p-4 h-[calc(100vh-12rem)] pb-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2 sm:p-4 h-[calc(100vh-12rem)]">
         {/* Left column - Campaign Instructions */}
         <CampaignInstructions
           selectedVoice={selectedVoice}
@@ -510,7 +510,7 @@ export default function CampaignCreate() {
       </div>
 
       {/* Footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background flex flex-col sm:flex-row gap-2 sm:gap-4 justify-between p-4 border-t">
+      <div className="sticky bottom-0 bg-background flex flex-col sm:flex-row gap-2 sm:gap-4 justify-between p-4 border-t">
         <Button
           variant="outline"
           onClick={() => setLocation("/campaigns")}
