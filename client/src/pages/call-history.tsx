@@ -145,14 +145,14 @@ const CallHistory = () => {
 
   const formatDate = (date: Date | string | null) => {
     if (!date) return "N/A";
-    
+
     const dateObj = date instanceof Date ? date : new Date(date);
     const day = dateObj.getDate().toString().padStart(2, '0');
     const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
     const year = dateObj.getFullYear().toString().substring(2);
     const hours = dateObj.getHours().toString().padStart(2, '0');
     const minutes = dateObj.getMinutes().toString().padStart(2, '0');
-    
+
     return `${day}/${month}/${year} - ${hours}:${minutes}`;
   };
 
@@ -165,10 +165,10 @@ const CallHistory = () => {
   return (
     <div>
       <PageHeader title="Call History" showSearch />
-      
+
       <div className="p-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Calls
@@ -181,8 +181,8 @@ const CallHistory = () => {
               </div>
             </CardContent>
           </Card>
-          
-          <Card>
+
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Average Duration
@@ -195,8 +195,8 @@ const CallHistory = () => {
               </div>
             </CardContent>
           </Card>
-          
-          <Card>
+
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Completion Rate
@@ -210,8 +210,8 @@ const CallHistory = () => {
             </CardContent>
           </Card>
         </div>
-        
-        <Card>
+
+        <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
           <CardHeader className="flex justify-between items-center">
             <CardTitle>Recent Calls</CardTitle>
           </CardHeader>
@@ -256,7 +256,7 @@ const CallHistory = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <CollapsibleContent>
                       <Separator />
                       <div className="p-4 bg-muted/30">
@@ -288,14 +288,14 @@ const CallHistory = () => {
                             <div className="text-sm">{call.contactPhone}</div>
                           </div>
                         </div>
-                        
+
                         <div className="mb-4">
                           <div className="text-sm font-medium mb-1">Call Summary</div>
                           <div className="text-sm bg-background p-3 rounded-md border">
                             {call.callSummary || "No summary available"}
                           </div>
                         </div>
-                        
+
                         {call.transcript && (
                           <div className="mb-4">
                             <div className="text-sm font-medium mb-1 flex items-center gap-1">
@@ -306,7 +306,7 @@ const CallHistory = () => {
                             </div>
                           </div>
                         )}
-                        
+
                         <div className="flex justify-end">
                           <Button
                             size="sm"

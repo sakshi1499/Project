@@ -39,7 +39,7 @@ const Billing = () => {
 
       <div className="p-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <Card>
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
             <CardHeader>
               <CardTitle>Current Plan</CardTitle>
               <CardDescription>
@@ -67,7 +67,7 @@ const Billing = () => {
             </CardFooter>
           </Card>
 
-          <Card>
+          <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
             <CardHeader>
               <CardTitle>Payment Method</CardTitle>
               <CardDescription>Manage your payment methods</CardDescription>
@@ -91,7 +91,7 @@ const Billing = () => {
           </Card>
         </div>
 
-        <Card>
+        <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
           <CardHeader>
             <CardTitle>Billing History</CardTitle>
             <CardDescription>View your past invoices</CardDescription>

@@ -110,7 +110,7 @@ const Settings = () => {
           </TabsList>
           
           <TabsContent value="profile">
-            <Card>
+            <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
               <CardHeader>
                 <CardTitle>Profile Information</CardTitle>
                 <CardDescription>
