@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
+import TestConversation from "@/components/campaigns/test-conversation";
 import CampaignInstructions from "@/components/campaigns/campaign-instructions";
 import { Input } from "@/components/ui/input";
 import {
@@ -448,18 +449,10 @@ export default function CampaignCreate() {
           </div>
 
           {!isCallActive ? (
-            <div className="flex flex-col items-center justify-center flex-1 bg-muted/30 rounded-lg">
-              <Button
-                size="lg"
-                className="mb-2"
-                onClick={startCall}
-              >
-                Start Call
-              </Button>
-              <p className="text-sm text-muted-foreground">
-                Click to test your voice agent with the current configuration
-              </p>
-            </div>
+            <TestConversation 
+              onStartCall={startCall}
+              isCallActive={isCallActive}
+            />
           ) : (
             <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm flex flex-col flex-1 w-full">
               {/* Conversation display */}
