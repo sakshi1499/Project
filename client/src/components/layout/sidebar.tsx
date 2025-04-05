@@ -89,7 +89,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="w-60 bg-zinc-900 border-r border-border/10 h-full flex-shrink-0">
+    <aside className="w-60 bg-background border-r border-border h-full flex-shrink-0">
       <div className="flex flex-col h-full">
         {/* User Profile */}
         <div className="p-4 mb-2">
@@ -104,9 +104,9 @@ const Sidebar = () => {
                       className="h-full w-full object-cover"
                     />
                   </div>
-                  <span className="font-medium text-white">Shiva Chintaluru</span>
+                  <span className="font-medium text-foreground">Shiva Chintaluru</span>
                 </div>
-                <ChevronDown className="h-4 w-4 text-white/70" />
+                <ChevronDown className="h-4 w-4 text-foreground/70" />
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-56">
@@ -148,7 +148,7 @@ const Sidebar = () => {
 
         {/* ProxyTalk text at the bottom */}
         <div className="p-4 mt-auto">
-          <div className="text-white text-center">
+          <div className="text-foreground text-center">
             ProxyTalk
           </div>
         </div>
