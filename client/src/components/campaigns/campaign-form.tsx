@@ -58,7 +58,7 @@ const CampaignForm = ({ isOpen, onClose, campaignToEdit }: CampaignFormProps) =>
         objective: "You are an AI sales representative calling on behalf of a premium project. Your goal is to engage the customer, gauge their interest, and persuade them to visit the site.",
         guidelines: "• Greet the customer by name and introduce yourself\n• Maintain a friendly and professional tone\n• Keep responses concise and avoid speaking more than two sentences at a time\n• Always end with a question or prompt to encourage customer response",
         callFlow: "Call Flow & Sample Prompts:\n1. Introduction:\n• \"Hello, am I speaking with [Customer Name]?\"",
-        voiceType: "Default Voice (Male)",
+        voiceType: "indian-male",
         maxCallCount: 100,
         status: false,
         createdBy: 1, // Hardcoded for demo
@@ -201,7 +201,7 @@ const CampaignForm = ({ isOpen, onClose, campaignToEdit }: CampaignFormProps) =>
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="Indian Male Voice">
+                              <SelectItem value="indian-male">
                                 <div className="flex items-center gap-2">
                                   <Avatar className="h-5 w-5">
                                     <span className="text-xs">AI</span>
@@ -209,23 +209,23 @@ const CampaignForm = ({ isOpen, onClose, campaignToEdit }: CampaignFormProps) =>
                                   Indian Male Voice
                                 </div>
                               </SelectItem>
-                              <SelectItem value="Default Voice (Male)">
+                              <SelectItem value="us-female">
                                 <div className="flex items-center gap-2">
                                   <Avatar className="h-5 w-5">
                                     <span className="text-xs">AI</span>
                                   </Avatar>
-                                  Default Voice (Male)
+                                  US Female Voice
                                 </div>
                               </SelectItem>
-                              <SelectItem value="Default Voice (Female)">
+                              <SelectItem value="uk-male">
                                 <div className="flex items-center gap-2">
                                   <Avatar className="h-5 w-5">
                                     <span className="text-xs">AI</span>
                                   </Avatar>
-                                  Default Voice (Female)
+                                  UK Male Voice
                                 </div>
                               </SelectItem>
-                              <SelectItem value="Custom Voice 1">
+                              <SelectItem value="custom-voice-1">
                                 <div className="flex items-center gap-2">
                                   <Avatar className="h-5 w-5">
                                     <span className="text-xs">AI</span>
