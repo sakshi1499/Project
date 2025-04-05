@@ -135,16 +135,16 @@ const Dashboard = () => {
                       nameKey="name"
                       cx="50%"
                       cy="50%"
-                      outerRadius={80}
+                      outerRadius={100}
                       labelLine={false}
                     >
                       {[
-                        { name: 'Hot Leads', value: 25, color: '#FF6B6B' },
-                        { name: 'Interested', value: 35, color: '#4ECDC4' },
-                        { name: 'Not Connected', value: 15, color: '#95A5A6' },
-                        { name: 'Not Interested', value: 10, color: '#E74C3C' },
-                        { name: 'Follow Up', value: 20, color: '#F39C12' },
-                        { name: 'Pending', value: 15, color: '#BDC3C7' }
+                        { name: 'Hot Leads', value: 25, color: '#FF4D4D' },
+                        { name: 'Interested', value: 35, color: '#4CAF50' },
+                        { name: 'Not Connected', value: 15, color: '#9E9E9E' },
+                        { name: 'Not Interested', value: 10, color: '#D32F2F' },
+                        { name: 'Follow Up', value: 20, color: '#FFA726' },
+                        { name: 'Pending', value: 15, color: '#78909C' }
                       ].map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
