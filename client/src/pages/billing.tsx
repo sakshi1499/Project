@@ -60,11 +60,7 @@ const Billing = () => {
                 <span className="font-semibold">June 01, 2023</span>
               </div>
             </CardContent>
-            <CardFooter>
-              <Button variant="outline" className="w-full">
-                Upgrade Plan
-              </Button>
-            </CardFooter>
+            <CardFooter></CardFooter>
           </Card>
 
           <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm">
@@ -84,7 +80,7 @@ const Billing = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button variant="outline" className="w-full">
+              <Button type="submit" className="w-full">
                 Update Payment Method
               </Button>
             </CardFooter>
