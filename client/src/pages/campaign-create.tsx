@@ -114,18 +114,27 @@ export default function CampaignCreate() {
     }
 
     try {
-      // Request microphone access
-      const stream = await navigator.mediaDevices.getUserMedia({ 
+      // Request microphone access first
+      const audioStream = await navigator.mediaDevices.getUserMedia({ 
         audio: true,
-        video: false
+        video: false 
       });
 
-      // Start speech recognition
-      SpeechRecognition.startListening({ continuous: true });
+      // Initialize audio context
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      
+      // Create and connect audio source
+      const source = audioContext.createMediaStreamSource(audioStream);
+      const analyser = audioContext.createAnalyser();
+      source.connect(analyser);
 
-      if (!stream) {
-        throw new Error('No audio stream available');
-      }
+      // Only start speech recognition after microphone is properly initialized
+      SpeechRecognition.startListening({ 
+        continuous: true,
+        language: 'en-US'
+      });
+
+      setIsCallActive(true);
 
       // Test the audio stream
       const audioContext = new AudioContext();
