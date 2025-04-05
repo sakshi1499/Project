@@ -1,7 +1,7 @@
 import PageHeader from "@/components/layout/page-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, ResponsiveContainer, Tooltip } from "recharts";
 import { Phone, Percent, Users, ArrowUpRight, ThumbsUp, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -143,78 +143,69 @@ const Dashboard = () => {
           </Card>
         </div>
         
-        {/* Monthly Leads Chart */}
-        <Card className="bg-card border-none shadow-sm mb-6">
-          <CardHeader className="pb-2">
-            <CardTitle>Leads per Month</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-[180px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyLeadsData}>
-                  <XAxis dataKey="name" tickLine={false} axisLine={false} />
-                  <YAxis 
-                    tickLine={false} 
-                    axisLine={false} 
-                    tickFormatter={(value) => `${value}`} 
-                    domain={[0, 3000]}
-                    ticks={[0, 1500, 3000]}
-                  />
-                  <Tooltip cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }} />
-                  <Bar 
-                    dataKey="leads" 
-                    fill="#a3a0fb" 
-                    radius={[4, 4, 0, 0]}
-                    barSize={35}
-                    fillOpacity={0.9}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-        
-        {/* Campaign Overview */}
-        <Card className="bg-card border-none shadow-sm mb-6">
-          <CardHeader className="pb-2">
-            <CardTitle>Campaign Overview</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="mt-2">
-              <div className="flex w-full h-5 mb-2 overflow-hidden rounded-full">
-                <div 
-                  className="bg-green-600" 
-                  style={{ width: `${campaignStatusData.hotLeads}%` }}
-                />
-                <div 
-                  className="bg-green-200" 
-                  style={{ width: `${campaignStatusData.interested}%` }} 
-                />
-                <div 
-                  className="bg-red-300" 
-                  style={{ width: `${campaignStatusData.notConnected}%` }} 
-                />
-                <div 
-                  className="bg-red-500" 
-                  style={{ width: `${campaignStatusData.notInterested}%` }} 
-                />
-                <div 
-                  className="bg-orange-400" 
-                  style={{ width: `${campaignStatusData.followUp}%` }} 
-                />
-                <div 
-                  className="bg-gray-300" 
-                  style={{ width: `${campaignStatusData.pending}%` }} 
-                />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          {/* Monthly Leads Chart */}
+          <Card className="bg-card border-none shadow-sm">
+            <CardHeader className="pb-2">
+              <CardTitle>Leads per Month</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[180px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={monthlyLeadsData}>
+                    <XAxis dataKey="name" tickLine={false} axisLine={false} />
+                    <YAxis 
+                      tickLine={false} 
+                      axisLine={false} 
+                      tickFormatter={(value) => `${value}`} 
+                      domain={[0, 3000]}
+                      ticks={[0, 1500, 3000]}
+                    />
+                    <Tooltip cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }} />
+                    <Bar 
+                      dataKey="leads" 
+                      fill="#a3a0fb" 
+                      radius={[4, 4, 0, 0]}
+                      barSize={35}
+                      fillOpacity={0.9}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
-              <div className="flex justify-between px-4 text-xs text-muted-foreground mt-4">
-                <span>Hot Leads ({campaignStatusData.hotLeads}%)</span>
-                <span>Interested ({campaignStatusData.interested}%)</span>
-                <span>Not Connected ({campaignStatusData.notConnected}%)</span>
+            </CardContent>
+          </Card>
+          
+          {/* Campaign Overview */}
+          <Card className="bg-card border-none shadow-sm">
+            <CardHeader className="pb-2">
+              <CardTitle>Campaign Overview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[180px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={[
+                        { name: 'Hot Leads', value: campaignStatusData.hotLeads, fill: '#22c55e' },
+                        { name: 'Interested', value: campaignStatusData.interested, fill: '#86efac' },
+                        { name: 'Not Connected', value: campaignStatusData.notConnected, fill: '#fca5a5' },
+                        { name: 'Not Interested', value: campaignStatusData.notInterested, fill: '#ef4444' },
+                        { name: 'Follow Up', value: campaignStatusData.followUp, fill: '#fb923c' },
+                        { name: 'Pending', value: campaignStatusData.pending, fill: '#d1d5db' }
+                      ]}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={80}
+                      dataKey="value"
+                    />
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Frequent Responses */}
