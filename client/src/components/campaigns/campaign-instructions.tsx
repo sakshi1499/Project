@@ -1,7 +1,12 @@
-
-import React from 'react';
+import React from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface CampaignInstructionsProps {
   selectedVoice: string;
@@ -17,7 +22,7 @@ const CampaignInstructions: React.FC<CampaignInstructionsProps> = ({
   setCampaignInstructions,
 }) => {
   return (
-    <div className="flex flex-col h-full bg-card rounded-lg p-4">
+    <div className="flex flex-col h-full bg-zinc-200 dark:bg-zinc-800 rounded-lg p-4">
       <div className="flex items-center gap-2 mb-4">
         <h2 className="text-lg font-semibold">Campaign Instructions</h2>
       </div>
@@ -107,7 +112,7 @@ const CampaignInstructions: React.FC<CampaignInstructionsProps> = ({
 
       <div className="rounded-md border border-input flex-1">
         <Textarea
-          className="w-full h-[300px] font-mono text-sm resize-none border-none rounded-none"
+          className="w-full h-[500px] font-mono text-sm resize-none border-none rounded-none"
           value={campaignInstructions}
           onChange={(e) => setCampaignInstructions(e.target.value)}
         />
