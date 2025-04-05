@@ -28,9 +28,9 @@ const CampaignInstructions: React.FC<CampaignInstructionsProps> = ({
       </div>
 
       <div className="mb-4">
-        <Select value={selectedVoice} onValueChange={setSelectedVoice}>
+        <Select defaultValue="indian-male" value={selectedVoice} onValueChange={setSelectedVoice}>
           <SelectTrigger>
-            <SelectValue placeholder="Select voice" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="indian-male">
