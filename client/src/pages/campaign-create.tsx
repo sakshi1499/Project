@@ -117,6 +117,15 @@ export default function CampaignCreate() {
       return;
     }
 
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      toast({
+        title: "Microphone Error",
+        description: "Microphone access is not available in your browser.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       // Request microphone access
       const stream = await navigator.mediaDevices.getUserMedia({ 
