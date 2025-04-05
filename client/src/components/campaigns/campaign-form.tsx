@@ -369,57 +369,7 @@ const CampaignForm = ({ isOpen, onClose, campaignToEdit }: CampaignFormProps) =>
                           </Button>
                         </div>
                         
-                        <div className="flex-1 overflow-y-auto mb-4 space-y-4">
-                          {/* AI Message */}
-                          <div className="flex items-start gap-3">
-                            <Avatar className="h-8 w-8 mt-1">
-                              <span className="text-xs">AI</span>
-                            </Avatar>
-                            <div className="bg-muted p-3 rounded-lg max-w-[80%]">
-                              <p className="text-sm">Hello, am I speaking with Riya?</p>
-                            </div>
-                          </div>
-                          
-                          {/* User Message */}
-                          <div className="flex items-start justify-end gap-3">
-                            <div className="bg-primary/10 p-3 rounded-lg max-w-[80%]">
-                              <p className="text-sm">Yes, who are you?</p>
-                            </div>
-                            <Avatar className="h-8 w-8 mt-1 bg-primary/20">
-                              <span className="text-xs">👤</span>
-                            </Avatar>
-                          </div>
-                          
-                          {/* AI Message */}
-                          <div className="flex items-start gap-3">
-                            <Avatar className="h-8 w-8 mt-1">
-                              <span className="text-xs">AI</span>
-                            </Avatar>
-                            <div className="bg-muted p-3 rounded-lg max-w-[80%]">
-                              <p className="text-sm">Hi Riya, I'm Amit from Aparna Sarovar. We're inviting select buyers to visit our premium luxury apartment project in Nallagandla. Do you have a minute to discuss?</p>
-                            </div>
-                          </div>
-                          
-                          {/* User Message */}
-                          <div className="flex items-start justify-end gap-3">
-                            <div className="bg-primary/10 p-3 rounded-lg max-w-[80%]">
-                              <p className="text-sm">I'm a bit busy. Can you tell me quickly?</p>
-                            </div>
-                            <Avatar className="h-8 w-8 mt-1 bg-primary/20">
-                              <span className="text-xs">👤</span>
-                            </Avatar>
-                          </div>
-                          
-                          {/* AI Message */}
-                          <div className="flex items-start gap-3">
-                            <Avatar className="h-8 w-8 mt-1">
-                              <span className="text-xs">AI</span>
-                            </Avatar>
-                            <div className="bg-muted p-3 rounded-lg max-w-[80%]">
-                              <p className="text-sm">Of course! Aparna Sarovar offers premium residences with world-class amenities in a prime location. The best way to experience it is with a site visit. Would you be open to stopping by this week?</p>
-                            </div>
-                          </div>
-                        </div>
+                  
                         
                         {/* Input Area */}
                         <div className="flex items-center gap-2 mt-auto border-t border-border pt-4">
