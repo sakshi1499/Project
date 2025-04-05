@@ -1,34 +1,55 @@
 import PageHeader from "@/components/layout/page-header";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { CreditCard, Download } from "lucide-react";
 
 // Placeholder data for invoices
 const invoiceData = [
-  { id: "INV-001", date: "Jan 01, 2023", amount: "$49.99", status: "Paid" },
-  { id: "INV-002", date: "Feb 01, 2023", amount: "$49.99", status: "Paid" },
-  { id: "INV-003", date: "Mar 01, 2023", amount: "$49.99", status: "Paid" },
-  { id: "INV-004", date: "Apr 01, 2023", amount: "$49.99", status: "Paid" },
-  { id: "INV-005", date: "May 01, 2023", amount: "$49.99", status: "Pending" },
+  { id: "INV-001", date: "Jan 01, 2023", amount: "INR 3000", status: "Paid" },
+  { id: "INV-002", date: "Feb 01, 2023", amount: "INR 3000", status: "Paid" },
+  { id: "INV-003", date: "Mar 01, 2023", amount: "INR 3000", status: "Paid" },
+  { id: "INV-004", date: "Apr 01, 2023", amount: "INR 3000", status: "Paid" },
+  {
+    id: "INV-005",
+    date: "May 01, 2023",
+    amount: "INR 3000",
+    status: "Pending",
+  },
 ];
 
 const Billing = () => {
   return (
     <div>
       <PageHeader title="Billing" />
-      
+
       <div className="p-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <Card>
             <CardHeader>
               <CardTitle>Current Plan</CardTitle>
-              <CardDescription>You are currently on the Pro plan</CardDescription>
+              <CardDescription>
+                You are currently on the Pro plan
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">Monthly fee</span>
-                <span className="font-semibold">$49.99</span>
+                <span className="font-semibold">INR 3000</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">Calls included</span>
@@ -56,7 +77,9 @@ const Billing = () => {
                 <CreditCard className="h-12 w-12 text-primary" />
                 <div>
                   <p className="font-semibold">Visa ending in 4242</p>
-                  <p className="text-sm text-muted-foreground">Expires 09/2025</p>
+                  <p className="text-sm text-muted-foreground">
+                    Expires 09/2025
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -67,7 +90,7 @@ const Billing = () => {
             </CardFooter>
           </Card>
         </div>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Billing History</CardTitle>
