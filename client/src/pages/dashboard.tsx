@@ -155,6 +155,7 @@ const Dashboard = () => {
                       align="right"
                       verticalAlign="middle"
                       formatter={(value, entry) => `${value} (${entry.payload.value}%)`}
+                      wrapperStyle={{ fontSize: '10px' }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
