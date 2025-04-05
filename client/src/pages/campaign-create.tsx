@@ -274,7 +274,7 @@ export default function CampaignCreate() {
     if ((!content.trim()) || isProcessing) return;
 
     let timeoutId: NodeJS.Timeout;
-    const TIMEOUT_DURATION = 5000; // 5 seconds timeout for faster error feedback
+    const TIMEOUT_DURATION = 15000; // 15 seconds timeout for better stability
 
     // Add user message to conversation immediately
     const userMessage = { role: "user", content: content.trim() };
@@ -465,7 +465,7 @@ export default function CampaignCreate() {
               isCallActive={isCallActive}
             />
           ) : (
-            <Card className="bg-zinc-200 dark:bg-zinc-800 border-none shadow-sm flex flex-col flex-1 w-full">
+            <div className="flex flex-col flex-1 w-full bg-[#1E1E1E]">
               {/* Conversation display */}
               <div className="flex-1 p-4 space-y-4">
                 {conversationHistory.map((message, index) => (
@@ -476,21 +476,21 @@ export default function CampaignCreate() {
                     }`}
                   >
                     {message.role === "assistant" && (
-                      <div className="w-8 h-8 rounded-full overflow-hidden bg-zinc-700 flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-zinc-800 flex-shrink-0">
                         <img src="/agent-avatar.png" alt="AI Agent" className="w-full h-full object-cover" />
                       </div>
                     )}
                     <div
                       className={`rounded-lg px-4 py-2 max-w-[80%] ${
                         message.role === "assistant"
-                          ? "bg-zinc-800"
-                          : "bg-zinc-700"
+                          ? "bg-zinc-800 text-white"
+                          : "bg-[#8257E6] text-white"
                       }`}
                     >
                       {message.content}
                     </div>
                     {message.role === "user" && (
-                      <div className="w-8 h-8 rounded-full overflow-hidden bg-zinc-700 flex-shrink-0 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-[#8257E6] flex-shrink-0 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                           <circle cx="12" cy="7" r="4"></circle>
