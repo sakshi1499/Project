@@ -230,13 +230,23 @@ export default function CampaignCreate() {
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
+    const SPEECH_PAUSE = 800; // Reduced from 1000ms to 800ms for faster response
+
     if (transcript && !isProcessing && isCallActive) {
-      // Wait for a short pause in speech before sending
+      // Clear previous timeout if it exists
+      if (timeout) clearTimeout(timeout);
+      
+      // Set new timeout for speech pause
       timeout = setTimeout(() => {
-        handleSendMessage(transcript);
-      }, 1000);
+        if (transcript.trim()) {
+          handleSendMessage(transcript);
+        }
+      }, SPEECH_PAUSE);
     }
-    return () => clearTimeout(timeout);
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
   }, [transcript, isProcessing, isCallActive]);
 
   useEffect(() => {
@@ -254,7 +264,10 @@ export default function CampaignCreate() {
     const content = messageContent || userInput;
     if ((!content.trim()) || isProcessing) return;
 
-    // Add user message to conversation
+    let timeoutId: NodeJS.Timeout;
+    const TIMEOUT_DURATION = 10000; // 10 seconds timeout
+
+    // Add user message to conversation immediately
     const userMessage = { role: "user", content: content.trim() };
     setConversationHistory(prev => [...prev, userMessage]);
     setIsProcessing(true);
@@ -262,31 +275,41 @@ export default function CampaignCreate() {
     setUserInput("");
 
     try {
+      // Set up timeout for the API call
+      const timeoutPromise = new Promise((_, reject) => {
+        timeoutId = setTimeout(() => reject(new Error('Request timeout')), TIMEOUT_DURATION);
+      });
+
       if (!chat.current) {
         chat.current = await startConversation();
-        // Send initial context
         await chat.current.sendMessage(campaignInstructions);
       }
 
-      // Send message to Gemini
-      const result = await chat.current.sendMessage(content.trim());
+      // Race between the API call and timeout
+      const result = await Promise.race([
+        chat.current.sendMessage(content.trim()),
+        timeoutPromise
+      ]);
+
+      clearTimeout(timeoutId);
       const aiResponse = await result.response.text();
+
+      if (!aiResponse) throw new Error('Empty response received');
 
       // Add AI response to conversation
       const assistantMessage = { role: "assistant", content: aiResponse };
       setConversationHistory(prev => [...prev, assistantMessage]);
-
+      
       // Speak the AI response
-      if (aiResponse) {
-        speakText(aiResponse);
-      } else {
-        console.error('Empty AI response received');
-      }
+      speakText(aiResponse);
+      
     } catch (error) {
-      console.error("Error calling OpenAI API:", error);
+      console.error("AI Response Error:", error);
       toast({
         title: "AI Response Error",
-        description: "Failed to get a response from the AI. Please try again.",
+        description: error instanceof Error && error.message === 'Request timeout' 
+          ? "Response took too long. Please try again." 
+          : "Failed to get a response. Please try again.",
         variant: "destructive",
       });
     } finally {
