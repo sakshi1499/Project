@@ -25,7 +25,7 @@ const PageHeader = ({ title, showSearch = false }: PageHeaderProps) => {
           </div>
         )}
         
-        {/* Notification icon */}
+        <ThemeToggle />
         <Button variant="ghost" size="icon" className="rounded-full">
           <Bell className="h-5 w-5" />
         </Button>
