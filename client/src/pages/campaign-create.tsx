@@ -504,12 +504,8 @@ export default function CampaignCreate() {
                     }`}
                   >
                     {message.role === "assistant" && (
-                      <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                        <img
-                          src="/ai-avatar.png"
-                          alt="AI Assistant"
-                          className="h-full w-full object-cover"
-                        />
+                      <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-muted/20 flex items-center justify-center">
+                        <span className="text-xs font-medium">AI</span>
                       </div>
                     )}
                     <div
