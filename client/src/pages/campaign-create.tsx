@@ -230,17 +230,13 @@ export default function CampaignCreate() {
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    const SPEECH_PAUSE = 800; // Reduced from 1000ms to 800ms for faster response
+    const SPEECH_PAUSE = 500; // Reduced pause time for faster response
 
-    if (transcript && !isProcessing && isCallActive) {
-      // Clear previous timeout if it exists
-      if (timeout) clearTimeout(timeout);
+    if (!isProcessing && isCallActive && transcript) {
+      resetTranscript(); // Reset transcript immediately to prevent duplicates
       
-      // Set new timeout for speech pause
       timeout = setTimeout(() => {
-        if (transcript.trim()) {
-          handleSendMessage(transcript);
-        }
+        handleSendMessage(transcript.trim());
       }, SPEECH_PAUSE);
     }
 
@@ -265,7 +261,7 @@ export default function CampaignCreate() {
     if ((!content.trim()) || isProcessing) return;
 
     let timeoutId: NodeJS.Timeout;
-    const TIMEOUT_DURATION = 10000; // 10 seconds timeout
+    const TIMEOUT_DURATION = 5000; // 5 seconds timeout for faster error feedback
 
     // Add user message to conversation immediately
     const userMessage = { role: "user", content: content.trim() };
